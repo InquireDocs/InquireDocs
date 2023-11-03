@@ -1,0 +1,3 @@
+chromadb==0.4.15
+gpt4all==2.0.2
+langchainhub==0.1.13
