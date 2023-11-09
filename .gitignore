@@ -1,3 +1,4 @@
+docs
 .db_local/*
 !.db_local/.gitkeep
 models/*
