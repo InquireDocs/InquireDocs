@@ -1,5 +1,7 @@
 .db_local/*
 !.db_local/.gitkeep
+models/*
+!models/.gitkeep
 
 # Created by https://www.toptal.com/developers/gitignore/api/macos,linux,windows,visualstudiocode,git,python,virtualenv,sublimetext
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,linux,windows,visualstudiocode,git,python,virtualenv,sublimetext

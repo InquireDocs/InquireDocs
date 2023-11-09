@@ -1,3 +1,6 @@
+beautifulsoup4==4.12.2
 chromadb==0.4.15
 gpt4all==2.0.2
+langchain==0.0.329
 langchainhub==0.1.13
+llama-cpp-python==0.2.13
