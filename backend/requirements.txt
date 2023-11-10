@@ -1,5 +1,5 @@
 beautifulsoup4==4.12.2
-chromadb==0.4.15
+chromadb==0.4.16
 gpt4all==2.0.2
 langchain==0.0.329
 langchainhub==0.1.13
