@@ -26,7 +26,7 @@ def load_documents_chunks():
 
 def save_embeddings(chunks):
     """Persist embeddings into local ChromDB vector store
-    @param chunks: Chinks to persist
+    @param chunks: Chunks to persist
     """
     logging.info("Load data into Chroma")
     vector_db = Database().langchain_chroma
