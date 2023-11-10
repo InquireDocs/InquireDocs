@@ -9,13 +9,16 @@ import config
 from db import Database
 
 
+PDF_DIRECTORY="./docs/test"
+
+
 # Langchain document loaders
 # https://python.langchain.com/docs/integrations/document_loaders
 def load_documents_chunks():
     """Loading documents and create chunks from them
     """
     logging.info("Loading documents")
-    loader = PyPDFDirectoryLoader(path=config.PDF_DIRECTORY, recursive=True)
+    loader = PyPDFDirectoryLoader(path=PDF_DIRECTORY, recursive=True)
     documents = loader.load()
 
     logging.info("Splitting documents into chunks")
@@ -26,7 +29,7 @@ def load_documents_chunks():
 
 def save_embeddings(chunks):
     """Persist embeddings into local ChromDB vector store
-    @param chunks: Chinks to persist
+    @param chunks: Chunks to persist
     """
     logging.info("Load data into Chroma")
     vector_db = Database().langchain_chroma
