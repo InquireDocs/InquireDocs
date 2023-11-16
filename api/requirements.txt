@@ -5,5 +5,4 @@ gpt4all==2.0.2
 langchain==0.0.335
 pyllamacpp==2.4.2
 pypdf==3.17.1
-pywin32==306; sys_platform == 'win32'
 uvicorn[standard]==0.24.0

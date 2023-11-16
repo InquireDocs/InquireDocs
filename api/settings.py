@@ -1,10 +1,6 @@
 from pathlib import Path
 import sys
 
-if sys.platform.startswith('win32'):
-    from win32con import FILE_ATTRIBUTE_HIDDEN
-    from win32api import SetFileAttributes
-
 
 class Settings():
     """ Application settings
@@ -13,9 +9,6 @@ class Settings():
     def __init__(self):
         self.__app_path = Path.home().joinpath('.inquiredocs')
         self.__app_path.mkdir(parents=True, exist_ok=True)
-
-        if sys.platform.startswith('win32'):
-            SetFileAttributes(self.__app_path, FILE_ATTRIBUTE_HIDDEN)
 
         self.__data_path = self.__app_path.joinpath('data')
         self.__data_path.mkdir(parents=True, exist_ok=True)

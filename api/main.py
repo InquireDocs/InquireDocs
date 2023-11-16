@@ -2,9 +2,9 @@ from fastapi import FastAPI
 from settings import config
 
 
-print("Application path: %s", config.get_app_path())
-print("Data path: %s", config.get_data_path())
-print("Model path: %s", config.get_model_path())
+print(f"Application path: {config.get_app_path()}")
+print(f"Data path: {config.get_data_path()}")
+print(f"Model path: {config.get_model_path()}")
 
 # app = FastAPI()
 
