@@ -1,9 +1,9 @@
 # InquireDocs
 
-## Backend
+## API
 
 ```
-cd backend
+cd api
 virtualenv env
 source env/bin/activate
 pip install --upgrade pip

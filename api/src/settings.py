@@ -16,25 +16,20 @@ class Settings():
         self.__model_path = self.__app_path.joinpath('model')
         self.__model_path.mkdir(parents=True, exist_ok=True)
 
-    def get_app_path(self):
+    def get_app_path(self) -> str:
         """ Public getter for __app_path
         Path for app config files and data.
         """
-        return self.__app_path
+        return str(self.__app_path.resolve())
 
-    def get_data_path(self):
+    def get_data_path(self) -> str:
         """ Public getter for __data_path
         Path for all data generated for the application.
         """
-        return self.__data_path
+        return str(self.__data_path.resolve())
 
-    def get_model_path(self):
+    def get_model_path(self) -> str:
         """ Public getter for __model_path
         Path for files related to the LLM used to answer questions.
         """
-        return self.__model_path
-
-
-#################
-# Global instance
-config = Settings()
+        return str(self.__model_path.resolve())
