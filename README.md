@@ -1,11 +1,24 @@
 # InquireDocs
 
-## API
+## Start the application
 
+### How to run locally
+
+Start the local database:
+```bash
+docker-compose --file utils/docker-compose.yaml up
 ```
-cd api
-virtualenv env
-source env/bin/activate
+
+Run the application:
+```bash
+virtualenv venv
+source venv/bin/activate
 pip install --upgrade pip
 pip install --requirement requirements.txt
+uvicorn app.main:app --reload
+```
+
+To enable debug mode set the variable `DEBUG` to true.
+```bash
+DEBUG=TRUE uvicorn app.main:app --reload
 ```
