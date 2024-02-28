@@ -3,6 +3,7 @@ from langchain.llms import GPT4All
 from langchain.chains.question_answering import load_qa_chain
 
 from db import Database
+from settings import Settings
 
 
 PROMPT_TEMPLATE = """
@@ -15,24 +16,26 @@ Always use the given context to provide an answer to the question: "{question}".
 """
 
 
-class Model():
-    def __init__(self):
-        self.vector_db = Database().langchain_chroma
+class LLM():
 
-        self.prompt = PromptTemplate(template=PROMPT_TEMPLATE, input_variables=["context", "question"])
+    def __init__(self, config: Settings, database: Database, verbose=False):
+        model_file_path = config.get_model_path() + "/mistral-7b-openorca.Q4_0.gguf"
 
-        self.chain_mistral_openorca = load_qa_chain(
-            GPT4All(model="./models/mistral-7b-openorca.Q4_0.gguf"),
+        self.__vector_db = database
+        self.__prompt = PromptTemplate(template=PROMPT_TEMPLATE, input_variables=["context", "question"])
+        self.__qa_chain = load_qa_chain(
+            GPT4All(model=model_file_path),
             chain_type="stuff",
-            prompt=self.prompt,
-            verbose=False
+            prompt=self.__prompt,
+            verbose=verbose
         )
 
-
     def elaborate_answer(self, question):
-        documents = self.vector_db.similarity_search(question)
+        """Answer a question.
+        """
+        documents = self.__vector_db.similarity_search(question)
 
-        return self.chain_mistral_openorca(
+        return self.__qa_chain(
           {
               "input_documents": documents,
               "question": question
