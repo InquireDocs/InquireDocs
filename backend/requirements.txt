@@ -3,5 +3,5 @@ chromadb==0.4.23
 gpt4all==2.2.1.post1
 langchain==0.1.9
 langchainhub==0.1.14
-pyllamacpp==2.4.2
+pyllamacpp==2.4.3
 pypdf==4.0.2
