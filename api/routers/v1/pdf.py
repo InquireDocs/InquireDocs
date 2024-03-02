@@ -1,5 +1,7 @@
 from fastapi import APIRouter, Response, status
 
+from ...ingestion import pdf
+
 
 router = APIRouter(prefix="/pdf", tags=["api", "v1", "pdf"])
 
