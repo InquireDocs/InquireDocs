@@ -1,12 +1,12 @@
 import logging
 import sys
 
-from fastapi import FastAPI
+from fastapi import FastAPI, APIRouter
 
 # from src.db import Database
 # from src.llm import LLM
 from .config import settings
-from .routers import v1
+from .routers.v1.main import router as v1_router
 
 
 #######################
@@ -37,9 +37,11 @@ logger.info("Model path: %s", settings.llm_path)
 
 ####################
 # Create FastAPI app
-app = FastAPI()
-app.include_router(v1.router)
+api_router = APIRouter(prefix="/api", tags=["api"])
+api_router.include_router(v1_router)
 
+app = FastAPI()
+app.include_router(api_router)
 
 
 

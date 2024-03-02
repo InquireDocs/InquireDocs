@@ -15,10 +15,10 @@ virtualenv venv
 source venv/bin/activate
 pip install --upgrade pip
 pip install --requirement requirements.txt
-uvicorn app.main:app --reload
+uvicorn api.main:app --reload
 ```
 
 To enable debug mode set the variable `DEBUG` to true.
 ```bash
-DEBUG=TRUE uvicorn app.main:app --reload
+DEBUG=TRUE uvicorn api.main:app --reload
 ```

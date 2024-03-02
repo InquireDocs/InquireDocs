@@ -1,12 +1,10 @@
 from fastapi import APIRouter
 
+from .pdf import router as pdf_router
 
-router = APIRouter(prefix="/v1", tags=["v1"])
 
-
-@router.get("/")
-def root_route():
-    return {"Hello": "World"}
+router = APIRouter(prefix="/v1", tags=["api", "v1"])
+router.include_router(pdf_router)
 
 
 @router.get("/search")
