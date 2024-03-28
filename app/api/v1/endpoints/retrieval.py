@@ -1,11 +1,7 @@
 from fastapi import APIRouter
 
-from .pdf import router as pdf_router
 
-
-router = APIRouter(prefix="/v1", tags=["api", "v1"])
-router.include_router(pdf_router)
-
+router = APIRouter()
 
 @router.get("/search")
 def search(search_string: str = "", min_score: float = 0.0, limit: int = 10):
@@ -25,7 +21,7 @@ def search(search_string: str = "", min_score: float = 0.0, limit: int = 10):
 @router.get("/ask")
 def ask():
     """
-    This is an example of Google style.
+    Method description.
 
     Args:
         param1: This is the first param.

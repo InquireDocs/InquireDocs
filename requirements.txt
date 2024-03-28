@@ -1,9 +1,10 @@
 # beautifulsoup4==4.12.3
-# chromadb==0.4.23
-fastapi==0.109.2
-# gpt4all==2.0.2
-langchain==0.1.9
-pydantic-settings==2.2.0
+chromadb==0.4.24
+fastapi==0.110.0
+gpt4all==2.3.2
+langchain==0.1.13
+langchain-community==0.0.29
+pydantic-settings==2.2.1
 # pyllamacpp==2.4.2
-pypdf==4.0.2
-uvicorn[standard]==0.27.0
+pypdf==4.1.0
+uvicorn[standard]==0.29.0
