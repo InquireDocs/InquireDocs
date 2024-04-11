@@ -4,4 +4,4 @@ gpt4all==2.4.0
 langchain==0.1.15
 langchainhub==0.1.15
 pyllamacpp==2.4.3
-pypdf==4.1.0
+pypdf==4.2.0
