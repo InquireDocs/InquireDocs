@@ -1,7 +1,7 @@
 beautifulsoup4==4.12.3
 chromadb==0.5.2
 gpt4all==2.7.0
-langchain==0.2.3
+langchain==0.2.5
 langchainhub==0.1.18
 pyllamacpp==2.4.3
 pypdf==4.2.0
