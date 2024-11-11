@@ -4,8 +4,8 @@ docs
 models/*
 !models/.gitkeep
 
-# Created by https://www.toptal.com/developers/gitignore/api/macos,linux,windows,visualstudiocode,git,python,virtualenv,sublimetext
-# Edit at https://www.toptal.com/developers/gitignore?templates=macos,linux,windows,visualstudiocode,git,python,virtualenv,sublimetext
+# Created by https://www.toptal.com/developers/gitignore/api/git,linux,macos,python,windows,virtualenv,sublimetext,visualstudiocode
+# Edit at https://www.toptal.com/developers/gitignore?templates=git,linux,macos,python,windows,virtualenv,sublimetext,visualstudiocode
 
 ### Git ###
 # Created by git for backups. To disable backups in Git:
@@ -332,4 +332,4 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# End of https://www.toptal.com/developers/gitignore/api/macos,linux,windows,visualstudiocode,git,python,virtualenv,sublimetext
+# End of https://www.toptal.com/developers/gitignore/api/git,linux,macos,python,windows,virtualenv,sublimetext,visualstudiocode
