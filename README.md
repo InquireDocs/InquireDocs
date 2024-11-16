@@ -8,7 +8,7 @@ TODO: Describe the application
 
 The application requires some environment variables. To run locally those can be set in a .env file in the root of the repository.
 Those are:
-- *PROJECT_NAME*: The name of the application. Default value is `PaaS Chat Backend`.
+- *PROJECT_NAME*: The name of the application. Default value is `InquireDocs`.
 - *DEBUG*: Boolean value to indicate if should include debug logs. Defaults to `false`.
 
 Run the application:
