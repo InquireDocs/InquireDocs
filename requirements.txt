@@ -1,4 +1,10 @@
+# General
 fastapi==0.115.5
+pydantic==2.9.2
+# pypdf==5.1.0
+uvicorn[standard]==0.32.0
+
+# Langchain
 langchain==0.3.7
 langchain-aws==0.2.7
 langchain-community==0.3.7
@@ -6,7 +12,7 @@ langchain-core==0.3.19
 langchain-openai==0.2.8
 langchain-ollama==0.2.0
 # langchain-postgres==0.0.12
+
+# Database
 # pgvector==0.2.5
 # psycopg-binary==3.2.3
-# pypdf==5.1.0
-uvicorn[standard]==0.32.0
