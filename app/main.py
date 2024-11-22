@@ -13,6 +13,7 @@ app = FastAPI(title=settings.project_name)
 
 logger.info("Starting")
 
+
 @app.get("/", status_code=status.HTTP_200_OK, tags=["root"])
 def root(request: Request):
     """Root endpoint"""
@@ -24,9 +25,11 @@ def root(request: Request):
       }
     }
 
+
 @app.get("/health", status_code=status.HTTP_200_OK, tags=["health"])
 def health_check():
     """Health check endpoint"""
     return {"status": "OK"}
+
 
 app.include_router(v1_router, prefix="/api/v1")

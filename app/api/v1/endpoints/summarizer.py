@@ -1,6 +1,6 @@
 import logging
 
-from fastapi import APIRouter, Query, status, HTTPException
+from fastapi import APIRouter, status, HTTPException
 
 from app.models.schema import SummaryRequest
 from app.services.summarizer import get_summary_types, generate_summary
@@ -16,7 +16,7 @@ def summary_types():
     """Get the supported summary types"""
     logger.debug("Get summary types")
     try:
-      return get_summary_types()
+        return get_summary_types()
     except (ValueError, Exception) as e:
         raise HTTPException(
           status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -35,7 +35,7 @@ def summarize(request: SummaryRequest):
     logger.debug("Summarize text")
 
     try:
-      return generate_summary(request)
+        return generate_summary(request)
     except (ValueError, Exception) as e:
         raise HTTPException(
           status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

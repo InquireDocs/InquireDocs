@@ -46,7 +46,7 @@ install-dev-deps: install-deps ## Install development dependencies
 
 # Linting and Formatting
 lint: venv ## Run linters
-	@$(FLAKE8) .
+	@$(FLAKE8) app tests
 
 format: venv ## Format code with black
 	@$(BLACK) .

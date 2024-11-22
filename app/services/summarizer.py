@@ -80,7 +80,7 @@ def generate_summary(request: SummaryRequest) -> str:
         stuff_chain = create_stuff_documents_chain(llm, prompt)
 
         # Run summarize on the text
-        docs = [ Document(page_content=request_text) ]
+        docs = [Document(page_content=request_text)]
         response = stuff_chain.invoke({"context": docs})
 
         return response

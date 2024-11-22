@@ -6,7 +6,6 @@ from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain_ollama import OllamaEmbeddings, OllamaLLM
 
 from app.core.config import parse_bool, parse_float, parse_int, settings
-from app.services import llm
 
 
 @pytest.fixture(scope="session", autouse=True)

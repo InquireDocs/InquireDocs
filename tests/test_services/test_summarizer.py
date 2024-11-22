@@ -1,13 +1,10 @@
 import pytest
 from unittest.mock import patch, MagicMock
 from langchain_core.documents import Document
-from langchain_core.prompts import PromptTemplate
-from langchain.chains.combine_documents import create_stuff_documents_chain
 
 from app.models.schema import SummaryRequest
-from app.core.config import settings
 
-from app.services.summarizer import SUMMARY_TYPES, get_summary_types, generate_summary
+from app.services.summarizer import get_summary_types, generate_summary
 
 
 def test_get_summary_types_return_structure():
