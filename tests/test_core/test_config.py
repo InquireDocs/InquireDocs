@@ -2,8 +2,11 @@ import os
 
 import pytest
 from unittest.mock import patch
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from langchain_ollama import OllamaEmbeddings, OllamaLLM
 
 from app.core.config import parse_bool, parse_float, parse_int, settings
+from app.services import llm
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -89,22 +92,25 @@ def test_set_project_name():
         assert settings.project_name == "Test Project"
 
 
-@patch("app.services.llm.get_ollama_embeddings_model")
-@patch("app.services.llm.get_ollama_model")
-def test_default_settings(mock_get_ollama_model, mock_get_ollama_embeddings_model):
+def test_default_settings():
     settings.load()
 
-    assert settings.debug is False
-    assert settings.project_name == "InquireDocs"
-    assert settings.llm_provider == "ollama"
+    settings_instance = settings  # Ensure singleton-like behavior
 
-    mock_get_ollama_embeddings_model.assert_called_once_with("http://localhost:11434", "all-minilm")
-    mock_get_ollama_model.assert_called_once_with("http://localhost:11434", "llama3.2:1b")
+    assert settings_instance.debug is False
+    assert settings_instance.project_name == "InquireDocs"
+    assert settings_instance.llm_provider == "ollama"
+
+    assert isinstance(settings_instance.embeddings, OllamaEmbeddings)
+    assert settings_instance.embeddings.base_url == "http://localhost:11434"
+    assert settings_instance.embeddings.model == "all-minilm"
+
+    assert isinstance(settings_instance.llm, OllamaLLM)
+    assert settings_instance.llm.base_url == "http://localhost:11434"
+    assert settings_instance.llm.model == "llama3.2:1b"
 
 
-@patch("app.services.llm.get_ollama_embeddings_model")
-@patch("app.services.llm.get_ollama_model")
-def test_ollama_custom_settings(mock_get_ollama_model, mock_get_ollama_embeddings_model):
+def test_ollama_custom_settings():
     with patch.dict(os.environ, {
       "OLLAMA_SERVER_URL": "http://127.0.0.1:1234",
       "OLLAMA_EMBEDDINGS_MODEL": "test_embeddings_model",
@@ -112,17 +118,22 @@ def test_ollama_custom_settings(mock_get_ollama_model, mock_get_ollama_embedding
     }):
         settings.load()
 
-        assert settings.debug is False
-        assert settings.project_name == "InquireDocs"
-        assert settings.llm_provider == "ollama"
+        settings_instance = settings  # Ensure singleton-like behavior
 
-        mock_get_ollama_embeddings_model.assert_called_once_with("http://127.0.0.1:1234", "test_embeddings_model")
-        mock_get_ollama_model.assert_called_once_with("http://127.0.0.1:1234", "test_ai_model")
+        assert settings_instance.debug is False
+        assert settings_instance.project_name == "InquireDocs"
+        assert settings_instance.llm_provider == "ollama"
+
+        assert isinstance(settings_instance.embeddings, OllamaEmbeddings)
+        assert settings_instance.embeddings.base_url == "http://127.0.0.1:1234"
+        assert settings_instance.embeddings.model == "test_embeddings_model"
+
+        assert isinstance(settings_instance.llm, OllamaLLM)
+        assert settings_instance.llm.base_url == "http://127.0.0.1:1234"
+        assert settings_instance.llm.model == "test_ai_model"
 
 
-@patch("app.services.llm.get_openai_embeddings_model")
-@patch("app.services.llm.get_openai_model")
-def test_openai_default_settings(mock_get_openai_model, mock_get_openai_embeddings_model):
+def test_openai_default_settings():
     with patch.dict(os.environ, {
       "LLM_PROVIDER": "openai",
       "OPENAI_API_KEY": "test-api-key"
@@ -133,19 +144,21 @@ def test_openai_default_settings(mock_get_openai_model, mock_get_openai_embeddin
 
         assert settings_instance.llm_provider == "openai"
 
-        mock_get_openai_embeddings_model.assert_called_once_with("test-api-key", "text-embedding-3-small")
-        mock_get_openai_model.assert_called_once_with("test-api-key", "gpt-4o-mini", 0)
+        assert isinstance(settings_instance.embeddings, OpenAIEmbeddings)
+        assert settings_instance.embeddings.model == "text-embedding-3-small"
+
+        assert isinstance(settings_instance.llm, ChatOpenAI)
+        assert settings_instance.llm.model_name == "gpt-4o-mini"
+        assert settings_instance.llm.temperature == 0
 
 
-def test_openai_settings_missing_api_key2():
+def test_openai_settings_missing_api_key():
     with pytest.raises(ValueError, match="OPENAI_API_KEY is required when LLM is set to 'openai'"):
         with patch.dict(os.environ, {"LLM_PROVIDER": "openai"}):
             settings.load()
 
 
-@patch("app.services.llm.get_openai_embeddings_model")
-@patch("app.services.llm.get_openai_model")
-def test_openai_custom_settings(mock_get_openai_model, mock_get_openai_embeddings_model):
+def test_openai_custom_settings():
     with patch.dict(os.environ, {
       "LLM_PROVIDER": "openai",
       "OPENAI_API_KEY": "test-api-key",
@@ -159,5 +172,9 @@ def test_openai_custom_settings(mock_get_openai_model, mock_get_openai_embedding
 
         assert settings_instance.llm_provider == "openai"
 
-        mock_get_openai_embeddings_model.assert_called_once_with("test-api-key", "test-embedding-model")
-        mock_get_openai_model.assert_called_once_with("test-api-key", "test-model", 0.2)
+        assert isinstance(settings_instance.embeddings, OpenAIEmbeddings)
+        assert settings_instance.embeddings.model == "test-embedding-model"
+
+        assert isinstance(settings_instance.llm, ChatOpenAI)
+        assert settings_instance.llm.model_name == "test-model"
+        assert settings_instance.llm.temperature == 0.2

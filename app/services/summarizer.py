@@ -64,6 +64,9 @@ def generate_summary(request: SummaryRequest) -> str:
     request_text = request.text
     request_type = request.summary_type
 
+    if request_text == "":
+        return "Please provide the text or information you would like summarized"
+
     try:
         # Define LLM
         llm = settings.llm

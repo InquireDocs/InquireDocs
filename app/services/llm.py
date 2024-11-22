@@ -1,9 +1,7 @@
 import logging
 
-from langchain_openai import ChatOpenAI
-from langchain_openai import OpenAIEmbeddings
-from langchain_ollama import OllamaLLM
-from langchain_ollama import OllamaEmbeddings
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from langchain_ollama import OllamaEmbeddings, OllamaLLM
 
 
 logger = logging.getLogger(__name__)
