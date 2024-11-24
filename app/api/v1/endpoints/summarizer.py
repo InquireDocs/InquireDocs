@@ -19,8 +19,8 @@ def summary_types():
         return get_summary_types()
     except (ValueError, Exception) as e:
         raise HTTPException(
-          status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-          detail="Error getting summary types."
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Error getting summary types.",
         ) from e
 
 
@@ -38,6 +38,6 @@ def summarize(request: SummaryRequest):
         return generate_summary(request)
     except (ValueError, Exception) as e:
         raise HTTPException(
-          status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-          detail="Error generating the summary."
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Error generating the summary.",
         ) from e

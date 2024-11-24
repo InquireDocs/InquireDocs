@@ -17,64 +17,101 @@ def mock_load_dotenv():
 
 @pytest.fixture(autouse=True)
 def clear_env():
-    """Clear specific environment variables before each test to ensure test isolation."""
+    """
+    Clear specific environment variables before each test to ensure test
+    isolation.
+    """
 
     keys_to_clear = [
-        "DEBUG", "PROJECT_NAME", "LLM_PROVIDER",
-        "OLLAMA_SERVER_URL", "OLLAMA_EMBEDDINGS_MODEL", "OLLAMA_AI_MODEL",
-        "OPENAI_API_KEY", "OPENAI_EMBEDDINGS_MODEL", "OPENAI_MODEL", "OPENAI_MODEL_TEMPERATURE"
+        "DEBUG",
+        "PROJECT_NAME",
+        "LLM_PROVIDER",
+        "OLLAMA_SERVER_URL",
+        "OLLAMA_EMBEDDINGS_MODEL",
+        "OLLAMA_AI_MODEL",
+        "OPENAI_API_KEY",
+        "OPENAI_EMBEDDINGS_MODEL",
+        "OPENAI_MODEL",
+        "OPENAI_MODEL_TEMPERATURE",
     ]
 
     for key in keys_to_clear:
         os.environ.pop(key, None)
 
 
-@pytest.mark.parametrize("name, value_to_test, expected_value", [
-  ("true-value-true", "true", True),
-  ("true-value-True", "True", True),
-  ("true-value-TRUE", "TRue", True),
-  ("true-value-TRUE", "TRUE", True),
-  ("false-value-false", "false", False),
-  ("false-value-False", "False", False),
-  ("false-value-FALSE", "FALSE", False),
-  ("false-value-anything", "anything", False),
-])
-def test_parse_bool(name: str, value_to_test: str, expected_value: bool) -> None:
+@pytest.mark.parametrize(
+    "name, value_to_test, expected_value",
+    [
+        ("true-value-true", "true", True),
+        ("true-value-True", "True", True),
+        ("true-value-TRUE", "TRue", True),
+        ("true-value-TRUE", "TRUE", True),
+        ("false-value-false", "false", False),
+        ("false-value-False", "False", False),
+        ("false-value-FALSE", "FALSE", False),
+        ("false-value-anything", "anything", False),
+    ],
+)
+def test_parse_bool(
+    name: str, value_to_test: str, expected_value: bool
+) -> None:
     """Test `parse_bool` function"""
     actual_value = parse_bool(value_to_test)
-    assert actual_value == expected_value, f"{name}: Expected {expected_value}, got {actual_value}"
+    assert (
+        actual_value == expected_value
+    ), f"{name}: Expected {expected_value}, got {actual_value}"
 
 
-@pytest.mark.parametrize("name, value_to_test, expected_value, expected_exception_message", [
-  ("test-valid_value", "5", 5, None),
-  ("test-negative-value", "-10", -10, None),
-  ("test-zero-value", "0", 0, None),
-  ("test-float-value", "5.8", None, "Invalid integer value: 5.8"),
-  ("test-not-a-number", "TEXT", None, "Invalid integer value: TEXT"),
-])
-def test_parse_int(name: str, value_to_test: str, expected_value: int, expected_exception_message: str) -> None:
+@pytest.mark.parametrize(
+    "name, value_to_test, expected_value, expected_exception_message",
+    [
+        ("test-valid_value", "5", 5, None),
+        ("test-negative-value", "-10", -10, None),
+        ("test-zero-value", "0", 0, None),
+        ("test-float-value", "5.8", None, "Invalid integer value: 5.8"),
+        ("test-not-a-number", "TEXT", None, "Invalid integer value: TEXT"),
+    ],
+)
+def test_parse_int(
+    name: str,
+    value_to_test: str,
+    expected_value: int,
+    expected_exception_message: str,
+) -> None:
     """Test `parse_int` function"""
     try:
         actual_value = parse_int(value_to_test)
-        assert actual_value == expected_value, f"{name}: Expected {expected_value}, got {actual_value}"
+        assert (
+            actual_value == expected_value
+        ), f"{name}: Expected {expected_value}, got {actual_value}"
     except ValueError as actual_exception:
         assert str(actual_exception) == expected_exception_message
 
 
-@pytest.mark.parametrize("name, value_to_test, expected_value, expected_exception_message", [
-  ("test-valid_value", "4.8", 4.8, None),
-  ("test-negative-value", "-10.5", -10.5, None),
-  ("test-zero-value", "0", 0, None),
-  ("test-positive-integer-value", "5", 5, None),
-  ("test-negative-integer-value", "-3", -3, None),
-  ("test-float-value-invalid", "5..0", None, "Invalid float value: 5..0"),
-  ("test-not-a-number", "TEXT", None, "Invalid float value: TEXT"),
-])
-def test_parse_float(name: str, value_to_test: str, expected_value: int, expected_exception_message: str) -> None:
+@pytest.mark.parametrize(
+    "name, value_to_test, expected_value, expected_exception_message",
+    [
+        ("test-valid_value", "4.8", 4.8, None),
+        ("test-negative-value", "-10.5", -10.5, None),
+        ("test-zero-value", "0", 0, None),
+        ("test-positive-integer-value", "5", 5, None),
+        ("test-negative-integer-value", "-3", -3, None),
+        ("test-float-value-invalid", "5..0", None, "Invalid float: 5..0"),
+        ("test-not-a-number", "TEXT", None, "Invalid float: TEXT"),
+    ],
+)
+def test_parse_float(
+    name: str,
+    value_to_test: str,
+    expected_value: int,
+    expected_exception_message: str,
+) -> None:
     """Test `parse_float` function"""
     try:
         actual_value = parse_float(value_to_test)
-        assert actual_value == expected_value, f"{name}: Expected {expected_value}, got {actual_value}"
+        assert (
+            actual_value == expected_value
+        ), f"{name}: Expected {expected_value}, got {actual_value}"
     except ValueError as actual_exception:
         assert str(actual_exception) == expected_exception_message
 
@@ -110,11 +147,14 @@ def test_default_settings():
 
 
 def test_ollama_custom_settings():
-    with patch.dict(os.environ, {
-      "OLLAMA_SERVER_URL": "http://127.0.0.1:1234",
-      "OLLAMA_EMBEDDINGS_MODEL": "test_embeddings_model",
-      "OLLAMA_AI_MODEL": "test_ai_model",
-    }):
+    with patch.dict(
+        os.environ,
+        {
+            "OLLAMA_SERVER_URL": "http://127.0.0.1:1234",
+            "OLLAMA_EMBEDDINGS_MODEL": "test_embeddings_model",
+            "OLLAMA_AI_MODEL": "test_ai_model",
+        },
+    ):
         settings.load()
 
         settings_instance = settings  # Ensure singleton-like behavior
@@ -133,10 +173,9 @@ def test_ollama_custom_settings():
 
 
 def test_openai_default_settings():
-    with patch.dict(os.environ, {
-      "LLM_PROVIDER": "openai",
-      "OPENAI_API_KEY": "test-api-key"
-    }):
+    with patch.dict(
+        os.environ, {"LLM_PROVIDER": "openai", "OPENAI_API_KEY": "test-api-key"}
+    ):
         settings.load()
 
         settings_instance = settings  # Ensure singleton-like behavior
@@ -152,19 +191,24 @@ def test_openai_default_settings():
 
 
 def test_openai_settings_missing_api_key():
-    with pytest.raises(ValueError, match="OPENAI_API_KEY is required when LLM is set to 'openai'"):
+    with pytest.raises(
+        ValueError, match="OPENAI_API_KEY is required when LLM is 'openai'"
+    ):
         with patch.dict(os.environ, {"LLM_PROVIDER": "openai"}):
             settings.load()
 
 
 def test_openai_custom_settings():
-    with patch.dict(os.environ, {
-      "LLM_PROVIDER": "openai",
-      "OPENAI_API_KEY": "test-api-key",
-      "OPENAI_EMBEDDINGS_MODEL": "test-embedding-model",
-      "OPENAI_MODEL": "test-model",
-      "OPENAI_MODEL_TEMPERATURE": "0.2"
-    }):
+    with patch.dict(
+        os.environ,
+        {
+            "LLM_PROVIDER": "openai",
+            "OPENAI_API_KEY": "test-api-key",
+            "OPENAI_EMBEDDINGS_MODEL": "test-embedding-model",
+            "OPENAI_MODEL": "test-model",
+            "OPENAI_MODEL_TEMPERATURE": "0.2",
+        },
+    ):
         settings.load()
 
         settings_instance = settings  # Ensure singleton-like behavior

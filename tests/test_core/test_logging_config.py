@@ -18,7 +18,10 @@ def mock_load_dotenv():
 
 @pytest.fixture(autouse=True)
 def clear_env():
-    """Clear DEBUG environment variable before each test to ensure test isolation."""
+    """
+    Clear DEBUG environment variable before each test to ensure test
+    isolation.
+    """
     os.environ.pop("DEBUG", None)
 
 

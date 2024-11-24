@@ -12,30 +12,30 @@ logger = logging.getLogger(__name__)
 
 
 SUMMARY_TYPES = {
-  "concise": {
-    "display_name": "Concise summary",
-    "description": "Write a concise summary of the text",
-    "prompt": """Write a concise summary of the following:
+    "concise": {
+        "display_name": "Concise summary",
+        "description": "Write a concise summary of the text",
+        "prompt": """Write a concise summary of the following:
 {context}
 CONCISE SUMMARY:
-"""
-  },
-  "detailed": {
-    "display_name": "Detailed summary",
-    "description": "Provide a detailed summary of the text",
-    "prompt": """Provide a detailed summary of the following text:
+""",
+    },
+    "detailed": {
+        "display_name": "Detailed summary",
+        "description": "Provide a detailed summary of the text",
+        "prompt": """Provide a detailed summary of the following text:
 {context}
 DETAILED SUMMARY:
-"""
-  },
-  "question": {
-    "display_name": "Generate questions",
-    "description": "Generate questions based on the text",
-    "prompt": """Generate questions based on the following text:
+""",
+    },
+    "question": {
+        "display_name": "Generate questions",
+        "description": "Generate questions based on the text",
+        "prompt": """Generate questions based on the following text:
 {context}
 QUESTIONS:
-"""
-  },
+""",
+    },
 }
 
 
@@ -45,7 +45,7 @@ def get_summary_types():
         {
             "name": key,
             "display_name": value["display_name"],
-            "description": value["description"]
+            "description": value["description"],
         }
         for key, value in SUMMARY_TYPES.items()
     ]
@@ -54,7 +54,8 @@ def get_summary_types():
 def generate_summary(request: SummaryRequest) -> str:
     """Generate a summary from the text provided in the arguments
     Args:
-        request: A SummaryRequest with all the data required to create the summary.
+        request: A SummaryRequest with all the data required to
+                 create the summary.
 
     Returns:
         The summary of the text provided.
@@ -65,7 +66,7 @@ def generate_summary(request: SummaryRequest) -> str:
     request_type = request.summary_type
 
     if request_text == "":
-        return "Please provide the text or information you would like summarized"
+        return "Please provide the text you would like summarized"
 
     try:
         # Define LLM

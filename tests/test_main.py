@@ -12,11 +12,11 @@ def test_root_endpoint():
 
     assert response.status_code == 200
     assert response.json() == {
-      "endpoints": {
-        "api": "http://testserver/api",
-        "docs": "http://testserver/docs",
-        "health": "http://testserver/health",
-      }
+        "endpoints": {
+            "api": "http://testserver/api",
+            "docs": "http://testserver/docs",
+            "health": "http://testserver/health",
+        }
     }
 
 

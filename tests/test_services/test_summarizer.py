@@ -19,13 +19,12 @@ def test_get_summary_types_return_structure():
         assert len(item.keys()) == 3
 
 
-@patch('app.services.summarizer.settings.llm')
-@patch('app.services.summarizer.create_stuff_documents_chain')
+@patch("app.services.summarizer.settings.llm")
+@patch("app.services.summarizer.create_stuff_documents_chain")
 def test_generate_summary_success(mock_create_stuff_documents_chain, mock_llm):
     """Test successful summary generation"""
     mock_summary_request = SummaryRequest(
-        text="Sample text for summarization",
-        summary_type="concise"
+        text="Sample text for summarization", summary_type="concise"
     )
 
     # Mock the create_stuff_documents_chain and its invoke method
@@ -43,39 +42,30 @@ def test_generate_summary_success(mock_create_stuff_documents_chain, mock_llm):
     mock_create_stuff_documents_chain.assert_called_once()
 
     # Verify chain invocation
-    mock_chain.invoke.assert_called_once_with({
-        "context": [Document(page_content=mock_summary_request.text)]
-    })
+    mock_chain.invoke.assert_called_once_with(
+        {"context": [Document(page_content=mock_summary_request.text)]}
+    )
 
 
 def test_generate_summary_with_empty_text():
     """Test summary generation with empty text"""
-    request = SummaryRequest(
-        text="",
-        summary_type="concise"
-    )
+    request = SummaryRequest(text="", summary_type="concise")
 
     response = generate_summary(request)
-    assert response == "Please provide the text or information you would like summarized"
+    assert response == "Please provide the text you would like summarized"
 
 
 def test_generate_summary_with_invalid_summary_type():
     """Test summary generation with an invalid summary type"""
-    request = SummaryRequest(
-        text="Sample text",
-        summary_type="invalid_type"
-    )
+    request = SummaryRequest(text="Sample text", summary_type="invalid_type")
     with pytest.raises(ValueError, match="Error generating summary"):
         generate_summary(request)
 
 
-@patch('app.services.summarizer.settings.llm')
+@patch("app.services.summarizer.settings.llm")
 def test_generate_summary_llm_error(mock_llm):
     """Test error handling when LLM fails"""
-    request = SummaryRequest(
-        text="Sample text",
-        summary_type="concise"
-    )
+    request = SummaryRequest(text="Sample text", summary_type="concise")
     mock_llm.side_effect = Exception("LLM Error")
     with pytest.raises(ValueError, match="Error generating summary"):
         generate_summary(request)

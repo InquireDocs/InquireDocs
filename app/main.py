@@ -4,7 +4,9 @@ from fastapi import FastAPI, status, Request
 
 from app.api.v1.routes import router as v1_router
 from app.core.config import settings
-from app.core.logging_config import root_logger  # This import ensures logging is configured
+
+# This import ensures logging is configured
+from app.core.logging_config import root_logger  # noqa: F401
 
 
 logger = logging.getLogger(__name__)
@@ -18,11 +20,11 @@ logger.info("Starting")
 def root(request: Request):
     """Root endpoint"""
     return {
-      "endpoints": {
-        "api": f"{request.url}api",
-        "docs": f"{request.url}docs",
-        "health": f"{request.url}health"
-      }
+        "endpoints": {
+            "api": f"{request.url}api",
+            "docs": f"{request.url}docs",
+            "health": f"{request.url}health",
+        }
     }
 
 
