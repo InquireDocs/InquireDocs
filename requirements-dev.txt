@@ -1,0 +1,13 @@
+# Testing
+pytest==8.3.3
+pytest-cov==6.0.0
+
+# Linting and Formatting
+flake8==7.1.1
+black==24.10.0
+
+# Pre-commit
+pre-commit==4.0.1
+
+# Coverage
+coverage==7.6.7

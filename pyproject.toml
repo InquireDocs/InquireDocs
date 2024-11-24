@@ -1,0 +1,12 @@
+[tool.black]
+line-length = 80
+include = '''
+(
+    app/.*\.py$
+  | tests/.*\.py$
+)
+'''
+
+[tool.pytest.ini_options]
+addopts = "--cov=app --cov-report=term-missing --cov-report=html"
+testpaths = ["tests"]
