@@ -9,7 +9,9 @@ repos:
       - id: check-case-conflict
       - id: check-docstring-first
       - id: check-executables-have-shebangs
+      - id: check-shebang-scripts-are-executable
       - id: check-json
+      - id: check-yaml
       - id: check-merge-conflict
       - id: end-of-file-fixer
   - repo: https://github.com/thlorenz/doctoc
@@ -22,3 +24,7 @@ repos:
           (?x)(
             ^.github/
           )
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.1.1
+    hooks:
+    -   id: flake8

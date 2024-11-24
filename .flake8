@@ -1,0 +1,5 @@
+[flake8]
+filename =
+    ./app/*.py
+    ./tests/*.py
+max-line-length = 80

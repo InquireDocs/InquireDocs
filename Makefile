@@ -46,10 +46,10 @@ install-dev-deps: install-deps ## Install development dependencies
 
 # Linting and Formatting
 lint: venv ## Run linters
-	@$(FLAKE8) --max-line-length 80 app tests
+	@$(FLAKE8) .
 
 format: venv ## Format code with black
-	@$(BLACK) --line-length 80 app tests
+	@$(BLACK) .
 
 # Testing
 # test: install-dev-deps ## Run application tests

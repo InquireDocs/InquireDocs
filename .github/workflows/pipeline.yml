@@ -31,8 +31,6 @@ jobs:
           pip install -r requirements-dev.txt
       - name: Run linting with Flake8
         run: make lint
-      - name: Format code with Black
-        run: make format
 
   test:
     runs-on: ubuntu-latest
