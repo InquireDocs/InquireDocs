@@ -1,6 +1,6 @@
 # General
 fastapi==0.115.5
-pydantic==2.10.1
+pydantic==2.10.2
 # pypdf==5.1.0
 uvicorn[standard]==0.32.1
 
