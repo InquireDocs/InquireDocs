@@ -68,12 +68,13 @@ clean-pycache: ## Remove Python cache files
 clean: clean-pycache ## Clean project (pycache, coverage, etc.)
 	@rm -rf .coverage htmlcov
 
-# # Docker Tasks
-# docker-build: ## Build the Docker image
-# 	@docker build -t app:latest .
+# Docker Tasks
+docker-build: ## Build the Docker image
+	@docker build --tag inquire-docs .
 
-# docker-run: docker-build ## Run the Docker container
-# 	@docker run -p 8000:8000 app:latest
+docker-run: docker-build ## Run the Docker container
+	@docker run --rm --name inquire-docs --publish 8000:8000 inquire-docs
 
-# docker-clean: ## Remove dangling Docker images
-# 	@docker image prune -f
+docker-clean: ## Remove dangling Docker images
+	@docker rm --force inquire-docs
+	@docker rmi --force inquire-docs

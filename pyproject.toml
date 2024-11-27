@@ -1,3 +1,12 @@
+[project]
+name = "inquire-docs"
+authors = [
+  {name = "Julian Nonino", email = "noninojulian@gmail.com"}
+]
+maintainers = [
+  {name = "Julian Nonino", email = "noninojulian@gmail.com"}
+]
+
 [tool.black]
 line-length = 80
 include = '''
