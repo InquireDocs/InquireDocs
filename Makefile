@@ -77,4 +77,4 @@ docker-run: docker-build ## Run the Docker container
 
 docker-clean: ## Remove dangling Docker images
 	@docker rm --force inquire-docs
-  @docker rmi --force inquire-docs
+	@docker rmi --force inquire-docs
