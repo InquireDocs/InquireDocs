@@ -1,7 +1,7 @@
 [project]
 name = "inquire-docs"
 authors = [
-  {name = "Julian Nonino", email = "noninojulian@gmail.com}
+  {name = "Julian Nonino", email = "noninojulian@gmail.com"}
 ]
 maintainers = [
   {name = "Julian Nonino", email = "noninojulian@gmail.com"}
