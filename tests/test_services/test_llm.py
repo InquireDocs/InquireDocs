@@ -1,5 +1,5 @@
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
-from langchain_ollama import OllamaLLM, OllamaEmbeddings
+from langchain_ollama import ChatOllama, OllamaEmbeddings
 from pydantic import SecretStr
 
 
@@ -32,12 +32,15 @@ def test_get_ollama_embeddings_model_success():
 def test_get_ollama_model_success():
     """Test successful creation of Ollama language model"""
     ollama_model = get_ollama_model(
-        server_url=TEST_SERVER_URL, ai_model=TEST_OLLAMA_MODEL
+        server_url=TEST_SERVER_URL,
+        ai_model=TEST_OLLAMA_MODEL,
+        model_temperature=TEST_TEMPERATURE
     )
 
-    assert isinstance(ollama_model, OllamaLLM)
+    assert isinstance(ollama_model, ChatOllama)
     assert ollama_model.base_url == TEST_SERVER_URL
     assert ollama_model.model == TEST_OLLAMA_MODEL
+    assert ollama_model.temperature == TEST_TEMPERATURE
 
 
 def test_get_openai_embeddings_model_success():
