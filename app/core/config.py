@@ -66,11 +66,14 @@ class _Settings:
                 ollama_ai_model: str = os.getenv(
                     "OLLAMA_AI_MODEL", "llama3.2:1b"
                 )
+                ollama_model_temperature: str = parse_float(
+                    os.getenv("OLLAMA_MODEL_TEMPERATURE", "0")
+                )
                 self.embeddings = llm.get_ollama_embeddings_model(
                     ollama_server_url, ollama_embeddings_model
                 )
                 self.llm = llm.get_ollama_model(
-                    ollama_server_url, ollama_ai_model
+                    ollama_server_url, ollama_ai_model, ollama_model_temperature
                 )
             case "openai":
                 logger.info("Using OpenAI for LLM and embeddings")

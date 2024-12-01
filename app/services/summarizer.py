@@ -51,7 +51,7 @@ def get_summary_types():
     ]
 
 
-def generate_summary(request: SummaryRequest) -> str:
+def generate_summary(request: SummaryRequest):
     """Generate a summary from the text provided in the arguments
     Args:
         request: A SummaryRequest with all the data required to
