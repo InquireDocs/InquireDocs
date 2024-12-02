@@ -3,7 +3,7 @@ import os
 import pytest
 from unittest.mock import patch
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
-from langchain_ollama import OllamaEmbeddings, OllamaLLM
+from langchain_ollama import ChatOllama, OllamaEmbeddings
 
 from app.core.config import parse_bool, parse_float, parse_int, settings
 
@@ -141,9 +141,10 @@ def test_default_settings():
     assert settings_instance.embeddings.base_url == "http://localhost:11434"
     assert settings_instance.embeddings.model == "all-minilm"
 
-    assert isinstance(settings_instance.llm, OllamaLLM)
+    assert isinstance(settings_instance.llm, ChatOllama)
     assert settings_instance.llm.base_url == "http://localhost:11434"
     assert settings_instance.llm.model == "llama3.2:1b"
+    assert settings_instance.llm.temperature == 0
 
 
 def test_ollama_custom_settings():
@@ -153,6 +154,7 @@ def test_ollama_custom_settings():
             "OLLAMA_SERVER_URL": "http://127.0.0.1:1234",
             "OLLAMA_EMBEDDINGS_MODEL": "test_embeddings_model",
             "OLLAMA_AI_MODEL": "test_ai_model",
+            "OLLAMA_MODEL_TEMPERATURE": "0.5",
         },
     ):
         settings.load()
@@ -167,9 +169,10 @@ def test_ollama_custom_settings():
         assert settings_instance.embeddings.base_url == "http://127.0.0.1:1234"
         assert settings_instance.embeddings.model == "test_embeddings_model"
 
-        assert isinstance(settings_instance.llm, OllamaLLM)
+        assert isinstance(settings_instance.llm, ChatOllama)
         assert settings_instance.llm.base_url == "http://127.0.0.1:1234"
         assert settings_instance.llm.model == "test_ai_model"
+        assert settings_instance.llm.temperature == 0.5
 
 
 def test_openai_default_settings():

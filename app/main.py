@@ -2,11 +2,11 @@ import logging
 
 from fastapi import FastAPI, status, Request
 
-from app.api.v1.routes import router as v1_router
-from app.core.config import settings
-
 # This import ensures logging is configured
 from app.core.logging_config import root_logger  # noqa: F401
+
+from app.api.v1.routes import router as v1_router
+from app.core.config import settings
 
 
 logger = logging.getLogger(__name__)

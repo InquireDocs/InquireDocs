@@ -1,7 +1,7 @@
 import logging
 
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
-from langchain_ollama import OllamaEmbeddings, OllamaLLM
+from langchain_ollama import ChatOllama, OllamaEmbeddings
 
 
 logger = logging.getLogger(__name__)
@@ -13,8 +13,10 @@ def get_ollama_embeddings_model(
     return OllamaEmbeddings(base_url=server_url, model=embeddings_model)
 
 
-def get_ollama_model(server_url: str, ai_model: str) -> OllamaLLM:
-    return OllamaLLM(base_url=server_url, model=ai_model)
+def get_ollama_model(server_url, ai_model, model_temperature) -> ChatOllama:
+    return ChatOllama(
+        base_url=server_url, model=ai_model, temperature=model_temperature
+    )
 
 
 def get_openai_embeddings_model(api_key, embeddings_model) -> OpenAIEmbeddings:
