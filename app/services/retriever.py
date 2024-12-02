@@ -1,9 +1,5 @@
 import logging
 
-from langchain.chains import create_retrieval_chain
-from langchain.chains.combine_documents import create_stuff_documents_chain
-from langchain_core.prompts import ChatPromptTemplate
-
 from app.core.config import settings
 from app.models.schema import QuestionRequest
 
@@ -21,6 +17,9 @@ def get_answer(request: QuestionRequest):
         The answer to the question asked.
     """
     logger.debug("Answering question")
+
+    if request.question == "":
+        return "Please provide the question to get an answer"
 
     try:
         # # Use RAG
@@ -48,24 +47,24 @@ def get_answer(request: QuestionRequest):
         raise ValueError(msg) from e
 
 
-def get_answer_with_rag(question: str, retriever):
-    rag_prompt = (
-        "You are an assistant for question-answering tasks. "
-        "Use the following pieces of retrieved context to answer the question. "
-        "If you don't know the answer, say that you don't know. "
-        "Use no more than 15 sentences and keep the answer concise."
-        "\n\n"
-        "{context}"
-    )
+# def get_answer_with_rag(question: str, retriever):
+#     rag_prompt = (
+#     "You are an assistant for question-answering tasks. "
+#      "Use the following pieces of retrieved context to answer the question. "
+#      "If you don't know the answer, say that you don't know. "
+#      "Use no more than 15 sentences and keep the answer concise."
+#      "\n\n"
+#      "{context}"
+#     )
 
-    prompt = ChatPromptTemplate.from_messages(
-        [
-            ("system", rag_prompt),
-            ("human", "{input}"),
-        ]
-    )
+#     prompt = ChatPromptTemplate.from_messages(
+#         [
+#             ("system", rag_prompt),
+#             ("human", "{input}"),
+#         ]
+#     )
 
-    question_answer_chain = create_stuff_documents_chain(settings.llm, prompt)
-    rag_chain = create_retrieval_chain(retriever, question_answer_chain)
-    response = rag_chain.invoke({"input": question})
-    return response
+#     question_answer_chain = create_stuff_documents_chain(settings.llm, prompt)
+#     rag_chain = create_retrieval_chain(retriever, question_answer_chain)
+#     response = rag_chain.invoke({"input": question})
+#     return response
