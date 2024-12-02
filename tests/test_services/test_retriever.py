@@ -13,7 +13,7 @@ def test_generate_summary_success(mock_llm):
     mock_request = QuestionRequest(
         question="What is the name of our planet?",
         use_rag=False,
-        rag_retrieve_threshold=0.5
+        rag_retrieve_threshold=0.5,
     )
 
     # Mock the LLM return value
@@ -26,17 +26,13 @@ def test_generate_summary_success(mock_llm):
     assert response == {"answer": "Earth"}
 
     # Verify LLM invocation
-    mock_llm.invoke.assert_called_once_with(
-        [("human", mock_request.question)]
-    )
+    mock_llm.invoke.assert_called_once_with([("human", mock_request.question)])
 
 
 def test_get_answer_with_empty_question():
     """Test generating an answer with empty question"""
     request = QuestionRequest(
-        question="",
-        use_rag=False,
-        rag_retrieve_threshold=0.5
+        question="", use_rag=False, rag_retrieve_threshold=0.5
     )
 
     response = get_answer(request)
@@ -49,7 +45,7 @@ def test_get_answer_llm_error(mock_llm):
     request = QuestionRequest(
         question="What is the name of our planet?",
         use_rag=False,
-        rag_retrieve_threshold=0.5
+        rag_retrieve_threshold=0.5,
     )
     mock_llm.invoke.side_effect = Exception("LLM Error")
     with pytest.raises(ValueError, match="Error generating answer"):

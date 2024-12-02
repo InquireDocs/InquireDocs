@@ -33,9 +33,7 @@ def test_successful_retrieval(mock_get_answer):
 def test_retrieval_empty_question(mock_get_answer):
     """Test retrieval with empty question"""
     test_request = QuestionRequest(
-        question="",
-        use_rag=False,
-        rag_retrieve_threshold=0.5
+        question="", use_rag=False, rag_retrieve_threshold=0.5
     )
 
     mock_get_answer.side_effect = ValueError("Text cannot be empty")

@@ -34,7 +34,7 @@ def test_get_ollama_model_success():
     ollama_model = get_ollama_model(
         server_url=TEST_SERVER_URL,
         ai_model=TEST_OLLAMA_MODEL,
-        model_temperature=TEST_TEMPERATURE
+        model_temperature=TEST_TEMPERATURE,
     )
 
     assert isinstance(ollama_model, ChatOllama)

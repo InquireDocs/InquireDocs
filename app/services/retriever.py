@@ -37,9 +37,7 @@ def get_answer(request: QuestionRequest):
 
         # Elaborate answer without RAG
         answer = settings.llm.invoke([("human", request.question)])
-        response = {
-            "answer": answer.content
-        }
+        response = {"answer": answer.content}
         return response
     except (ValueError, Exception) as e:
         msg = "Error generating answer"
