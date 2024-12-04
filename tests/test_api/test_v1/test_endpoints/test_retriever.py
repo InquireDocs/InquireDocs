@@ -17,6 +17,7 @@ def test_successful_retrieval(mock_get_answer):
         question="Which is the name of our planet?",
         use_rag=False,
         rag_retrieve_threshold=0.5,
+        llm_provider="test_ai",
     )
     expected_answer = "Earth"
 
@@ -33,7 +34,10 @@ def test_successful_retrieval(mock_get_answer):
 def test_retrieval_empty_question(mock_get_answer):
     """Test retrieval with empty question"""
     test_request = QuestionRequest(
-        question="", use_rag=False, rag_retrieve_threshold=0.5
+        question="",
+        use_rag=False,
+        rag_retrieve_threshold=0.5,
+        llm_provider="test_ai",
     )
 
     mock_get_answer.side_effect = ValueError("Text cannot be empty")
@@ -52,6 +56,7 @@ def test_retrieval_service_error(mock_get_answer):
         question="Which is the name of our planet?",
         use_rag=False,
         rag_retrieve_threshold=0.5,
+        llm_provider="test_ai",
     )
 
     mock_get_answer.side_effect = Exception("Service error")

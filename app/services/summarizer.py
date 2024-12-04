@@ -70,7 +70,7 @@ def generate_summary(request: SummaryRequest):
 
     try:
         # Define LLM
-        llm = settings.llm
+        llm = settings.get_ai_model(request.llm_provider)
 
         # Define prompt
         summary_type = SUMMARY_TYPES.get(request_type)

@@ -36,7 +36,8 @@ def get_answer(request: QuestionRequest):
         #     return get_answer_with_rag(request.question, retriever)
 
         # Elaborate answer without RAG
-        answer = settings.llm.invoke([("human", request.question)])
+        llm = settings.get_ai_model(request.llm_provider)
+        answer = llm.invoke([("human", request.question)])
         response = {"answer": answer.content}
         return response
     except (ValueError, Exception) as e:
@@ -62,7 +63,8 @@ def get_answer(request: QuestionRequest):
 #         ]
 #     )
 
-#     question_answer_chain = create_stuff_documents_chain(settings.llm, prompt)
-#     rag_chain = create_retrieval_chain(retriever, question_answer_chain)
-#     response = rag_chain.invoke({"input": question})
-#     return response
+#    llm = settings.get_ai_model(request.llm_provider)
+#    question_answer_chain = create_stuff_documents_chain(llm, prompt)
+#    rag_chain = create_retrieval_chain(retriever, question_answer_chain)
+#    response = rag_chain.invoke({"input": question})
+#    return response

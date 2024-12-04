@@ -2,4 +2,4 @@
 filename =
     ./app/*.py
     ./tests/*.py
-max-line-length = 80
+max-line-length = 100

@@ -25,7 +25,7 @@ def clear_env():
     keys_to_clear = [
         "DEBUG",
         "PROJECT_NAME",
-        "LLM_PROVIDER",
+        "ENABLED_LLM_PROVIDERS",
         "OLLAMA_SERVER_URL",
         "OLLAMA_EMBEDDINGS_MODEL",
         "OLLAMA_AI_MODEL",
@@ -52,14 +52,10 @@ def clear_env():
         ("false-value-anything", "anything", False),
     ],
 )
-def test_parse_bool(
-    name: str, value_to_test: str, expected_value: bool
-) -> None:
+def test_parse_bool(name: str, value_to_test: str, expected_value: bool) -> None:
     """Test `parse_bool` function"""
     actual_value = parse_bool(value_to_test)
-    assert (
-        actual_value == expected_value
-    ), f"{name}: Expected {expected_value}, got {actual_value}"
+    assert actual_value == expected_value, f"{name}: Expected {expected_value}, got {actual_value}"
 
 
 @pytest.mark.parametrize(
@@ -135,16 +131,18 @@ def test_default_settings():
 
     assert settings_instance.debug is False
     assert settings_instance.project_name == "InquireDocs"
-    assert settings_instance.llm_provider == "ollama"
+    assert settings_instance.enabled_llm_providers == ["ollama"]
 
-    assert isinstance(settings_instance.embeddings, OllamaEmbeddings)
-    assert settings_instance.embeddings.base_url == "http://localhost:11434"
-    assert settings_instance.embeddings.model == "all-minilm"
+    embeddings_model = settings_instance.get_embeddings_model("ollama")
+    assert isinstance(embeddings_model, OllamaEmbeddings)
+    assert embeddings_model.base_url == "http://localhost:11434"
+    assert embeddings_model.model == "all-minilm"
 
-    assert isinstance(settings_instance.llm, ChatOllama)
-    assert settings_instance.llm.base_url == "http://localhost:11434"
-    assert settings_instance.llm.model == "llama3.2:1b"
-    assert settings_instance.llm.temperature == 0
+    ai_model = settings_instance.get_ai_model("ollama")
+    assert isinstance(ai_model, ChatOllama)
+    assert ai_model.base_url == "http://localhost:11434"
+    assert ai_model.model == "llama3.2:1b"
+    assert ai_model.temperature == 0
 
 
 def test_ollama_custom_settings():
@@ -163,41 +161,44 @@ def test_ollama_custom_settings():
 
         assert settings_instance.debug is False
         assert settings_instance.project_name == "InquireDocs"
-        assert settings_instance.llm_provider == "ollama"
+        assert settings_instance.enabled_llm_providers == ["ollama"]
 
-        assert isinstance(settings_instance.embeddings, OllamaEmbeddings)
-        assert settings_instance.embeddings.base_url == "http://127.0.0.1:1234"
-        assert settings_instance.embeddings.model == "test_embeddings_model"
+        embeddings_model = settings_instance.get_embeddings_model("ollama")
+        assert isinstance(embeddings_model, OllamaEmbeddings)
+        assert embeddings_model.base_url == "http://127.0.0.1:1234"
+        assert embeddings_model.model == "test_embeddings_model"
 
-        assert isinstance(settings_instance.llm, ChatOllama)
-        assert settings_instance.llm.base_url == "http://127.0.0.1:1234"
-        assert settings_instance.llm.model == "test_ai_model"
-        assert settings_instance.llm.temperature == 0.5
+        ai_model = settings_instance.get_ai_model("ollama")
+        assert isinstance(ai_model, ChatOllama)
+        assert ai_model.base_url == "http://127.0.0.1:1234"
+        assert ai_model.model == "test_ai_model"
+        assert ai_model.temperature == 0.5
 
 
 def test_openai_default_settings():
     with patch.dict(
-        os.environ, {"LLM_PROVIDER": "openai", "OPENAI_API_KEY": "test-api-key"}
+        os.environ,
+        {"ENABLED_LLM_PROVIDERS": "openai", "OPENAI_API_KEY": "test-api-key"},
     ):
         settings.load()
 
         settings_instance = settings  # Ensure singleton-like behavior
 
-        assert settings_instance.llm_provider == "openai"
+        assert settings_instance.enabled_llm_providers == ["openai"]
 
-        assert isinstance(settings_instance.embeddings, OpenAIEmbeddings)
-        assert settings_instance.embeddings.model == "text-embedding-3-small"
+        embeddings_model = settings_instance.get_embeddings_model("openai")
+        assert isinstance(embeddings_model, OpenAIEmbeddings)
+        assert embeddings_model.model == "text-embedding-3-small"
 
-        assert isinstance(settings_instance.llm, ChatOpenAI)
-        assert settings_instance.llm.model_name == "gpt-4o-mini"
-        assert settings_instance.llm.temperature == 0
+        ai_model = settings_instance.get_ai_model("openai")
+        assert isinstance(ai_model, ChatOpenAI)
+        assert ai_model.model_name == "gpt-4o-mini"
+        assert ai_model.temperature == 0
 
 
 def test_openai_settings_missing_api_key():
-    with pytest.raises(
-        ValueError, match="OPENAI_API_KEY is required when LLM is 'openai'"
-    ):
-        with patch.dict(os.environ, {"LLM_PROVIDER": "openai"}):
+    with pytest.raises(ValueError, match="OPENAI_API_KEY is required when LLM is 'openai'"):
+        with patch.dict(os.environ, {"ENABLED_LLM_PROVIDERS": "openai"}):
             settings.load()
 
 
@@ -205,7 +206,7 @@ def test_openai_custom_settings():
     with patch.dict(
         os.environ,
         {
-            "LLM_PROVIDER": "openai",
+            "ENABLED_LLM_PROVIDERS": "openai",
             "OPENAI_API_KEY": "test-api-key",
             "OPENAI_EMBEDDINGS_MODEL": "test-embedding-model",
             "OPENAI_MODEL": "test-model",
@@ -216,11 +217,98 @@ def test_openai_custom_settings():
 
         settings_instance = settings  # Ensure singleton-like behavior
 
-        assert settings_instance.llm_provider == "openai"
+        assert settings_instance.enabled_llm_providers == ["openai"]
 
-        assert isinstance(settings_instance.embeddings, OpenAIEmbeddings)
-        assert settings_instance.embeddings.model == "test-embedding-model"
+        embeddings_model = settings_instance.get_embeddings_model("openai")
+        assert isinstance(embeddings_model, OpenAIEmbeddings)
+        assert embeddings_model.model == "test-embedding-model"
 
-        assert isinstance(settings_instance.llm, ChatOpenAI)
-        assert settings_instance.llm.model_name == "test-model"
-        assert settings_instance.llm.temperature == 0.2
+        ai_model = settings_instance.get_ai_model("openai")
+        assert isinstance(ai_model, ChatOpenAI)
+        assert ai_model.model_name == "test-model"
+        assert ai_model.temperature == 0.2
+
+
+def test_multiple_models_default_settings():
+    with patch.dict(
+        os.environ,
+        {
+            "ENABLED_LLM_PROVIDERS": "ollama,openai",
+            "OPENAI_API_KEY": "test-api-key",
+        },
+    ):
+        settings.load()
+
+        settings_instance = settings  # Ensure singleton-like behavior
+
+        assert settings_instance.enabled_llm_providers == ["ollama", "openai"]
+
+        # Ollama embeddings
+        embeddings_model = settings_instance.get_embeddings_model("ollama")
+        assert isinstance(embeddings_model, OllamaEmbeddings)
+        assert embeddings_model.base_url == "http://localhost:11434"
+        assert embeddings_model.model == "all-minilm"
+
+        # Ollama LLM
+        ai_model = settings_instance.get_ai_model("ollama")
+        assert isinstance(ai_model, ChatOllama)
+        assert ai_model.base_url == "http://localhost:11434"
+        assert ai_model.model == "llama3.2:1b"
+        assert ai_model.temperature == 0
+
+        # OpenAI embeddings
+        embeddings_model = settings_instance.get_embeddings_model("openai")
+        assert isinstance(embeddings_model, OpenAIEmbeddings)
+        assert embeddings_model.model == "text-embedding-3-small"
+
+        # OpenAI LLM
+        ai_model = settings_instance.get_ai_model("openai")
+        assert isinstance(ai_model, ChatOpenAI)
+        assert ai_model.model_name == "gpt-4o-mini"
+        assert ai_model.temperature == 0
+
+
+def test_multiple_models_custom_settings():
+    with patch.dict(
+        os.environ,
+        {
+            "ENABLED_LLM_PROVIDERS": "ollama,openai",
+            "OLLAMA_SERVER_URL": "http://127.0.0.1:1234",
+            "OLLAMA_EMBEDDINGS_MODEL": "test_embeddings_model",
+            "OLLAMA_AI_MODEL": "test_ai_model",
+            "OLLAMA_MODEL_TEMPERATURE": "0.5",
+            "OPENAI_API_KEY": "test-api-key",
+            "OPENAI_EMBEDDINGS_MODEL": "test-embedding-model",
+            "OPENAI_MODEL": "test-model",
+            "OPENAI_MODEL_TEMPERATURE": "0.2",
+        },
+    ):
+        settings.load()
+
+        settings_instance = settings  # Ensure singleton-like behavior
+
+        assert settings_instance.enabled_llm_providers == ["ollama", "openai"]
+
+        # Ollama embeddings
+        embeddings_model = settings_instance.get_embeddings_model("ollama")
+        assert isinstance(embeddings_model, OllamaEmbeddings)
+        assert embeddings_model.base_url == "http://127.0.0.1:1234"
+        assert embeddings_model.model == "test_embeddings_model"
+
+        # Ollama LLM
+        ai_model = settings_instance.get_ai_model("ollama")
+        assert isinstance(ai_model, ChatOllama)
+        assert ai_model.base_url == "http://127.0.0.1:1234"
+        assert ai_model.model == "test_ai_model"
+        assert ai_model.temperature == 0.5
+
+        # OpenAI embeddings
+        embeddings_model = settings_instance.get_embeddings_model("openai")
+        assert isinstance(embeddings_model, OpenAIEmbeddings)
+        assert embeddings_model.model == "test-embedding-model"
+
+        # OpenAI LLM
+        ai_model = settings_instance.get_ai_model("openai")
+        assert isinstance(ai_model, ChatOpenAI)
+        assert ai_model.model_name == "test-model"
+        assert ai_model.temperature == 0.2

@@ -8,7 +8,5 @@ from app.api.v1.endpoints.retriever import router as retriever_router
 router = APIRouter()
 
 router.include_router(git_router, prefix="/git", tags=["git"])
-router.include_router(
-    summarizer_router, prefix="/summarizer", tags=["summarizer"]
-)
+router.include_router(summarizer_router, prefix="/summarizer", tags=["summarizer"])
 router.include_router(retriever_router, prefix="/retriever", tags=["retriever"])

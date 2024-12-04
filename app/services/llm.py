@@ -7,16 +7,12 @@ from langchain_ollama import ChatOllama, OllamaEmbeddings
 logger = logging.getLogger(__name__)
 
 
-def get_ollama_embeddings_model(
-    server_url: str, embeddings_model: str
-) -> OllamaEmbeddings:
+def get_ollama_embeddings_model(server_url: str, embeddings_model: str) -> OllamaEmbeddings:
     return OllamaEmbeddings(base_url=server_url, model=embeddings_model)
 
 
 def get_ollama_model(server_url, ai_model, model_temperature) -> ChatOllama:
-    return ChatOllama(
-        base_url=server_url, model=ai_model, temperature=model_temperature
-    )
+    return ChatOllama(base_url=server_url, model=ai_model, temperature=model_temperature)
 
 
 def get_openai_embeddings_model(api_key, embeddings_model) -> OpenAIEmbeddings:
@@ -24,6 +20,4 @@ def get_openai_embeddings_model(api_key, embeddings_model) -> OpenAIEmbeddings:
 
 
 def get_openai_model(api_key, model, model_temperature) -> ChatOpenAI:
-    return ChatOpenAI(
-        api_key=api_key, temperature=model_temperature, model_name=model
-    )
+    return ChatOpenAI(api_key=api_key, temperature=model_temperature, model_name=model)

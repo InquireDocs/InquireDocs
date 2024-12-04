@@ -3,9 +3,7 @@ import logging
 from app.core.config import settings
 
 # Set up logging configuration
-formatter = logging.Formatter(
-    "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 
 # Configure the console handler
 console_handler = logging.StreamHandler()
@@ -22,6 +20,4 @@ logger = logging.getLogger(__name__)
 
 # Log effective level for root logger
 effective_level = root_logger.getEffectiveLevel()
-logger.info(
-    "Root logger effective level %s", logging.getLevelName(effective_level)
-)
+logger.info("Root logger effective level %s", logging.getLevelName(effective_level))
