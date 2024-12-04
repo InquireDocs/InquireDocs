@@ -88,10 +88,14 @@ class _Settings:
     def get_embeddings_model(self, provider: str) -> Embeddings:
         if provider in self.llm_models:
             return self.llm_models[provider]["embeddings"]
+        else:
+            raise ValueError(f"The provider {provider} is not in the list of enabled providers {self.enabled_llm_providers}")  # noqa: E501
 
     def get_ai_model(self, provider: str) -> BaseChatModel:
         if provider in self.llm_models:
             return self.llm_models[provider]["llm"]
+        else:
+            raise ValueError(f"The provider {provider} is not in the list of enabled providers {self.enabled_llm_providers}")  # noqa: E501
 
 
 settings = _Settings()
