@@ -1,7 +1,9 @@
 import logging
-
 import os
+
 from dotenv import load_dotenv
+from langchain_core.embeddings import Embeddings
+from langchain_core.language_models.chat_models import BaseChatModel
 
 from app.services import llm
 
@@ -52,49 +54,48 @@ class _Settings:
     def load(self):
         self.debug: bool = parse_bool(os.getenv("DEBUG", "false"))
         self.project_name: str = os.getenv("PROJECT_NAME", "InquireDocs")
-        self.llm_provider: str = os.getenv("LLM_PROVIDER", "ollama")
+        enabled_llm_providers: str = os.getenv("ENABLED_LLM_PROVIDERS", "ollama")
 
-        match self.llm_provider:
-            case "ollama":
-                logger.info("Using Ollama for LLM and embeddings")
-                ollama_server_url: str = os.getenv(
-                    "OLLAMA_SERVER_URL", "http://localhost:11434"
-                )
-                ollama_embeddings_model: str = os.getenv(
-                    "OLLAMA_EMBEDDINGS_MODEL", "all-minilm"
-                )
-                ollama_ai_model: str = os.getenv(
-                    "OLLAMA_AI_MODEL", "llama3.2:1b"
-                )
-                ollama_model_temperature: str = parse_float(
-                    os.getenv("OLLAMA_MODEL_TEMPERATURE", "0")
-                )
-                self.embeddings = llm.get_ollama_embeddings_model(
-                    ollama_server_url, ollama_embeddings_model
-                )
-                self.llm = llm.get_ollama_model(
-                    ollama_server_url, ollama_ai_model, ollama_model_temperature
-                )
-            case "openai":
-                logger.info("Using OpenAI for LLM and embeddings")
-                openai_api_key: str = os.getenv("OPENAI_API_KEY")
-                if not openai_api_key:
-                    raise ValueError(
-                        "OPENAI_API_KEY is required when LLM is 'openai'"
-                    )
-                openai_embeddings_model: str = os.getenv(
-                    "OPENAI_EMBEDDINGS_MODEL", "text-embedding-3-small"
-                )
-                openai_model: str = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
-                openai_model_temperature: str = parse_float(
-                    os.getenv("OPENAI_MODEL_TEMPERATURE", "0")
-                )
-                self.embeddings = llm.get_openai_embeddings_model(
-                    openai_api_key, openai_embeddings_model
-                )
-                self.llm = llm.get_openai_model(
-                    openai_api_key, openai_model, openai_model_temperature
-                )
+        self.enabled_llm_providers = enabled_llm_providers.split(",")
+
+        self.llm_models = {}
+
+        if "ollama" in self.enabled_llm_providers:
+            logger.info("Using Ollama for LLM and embeddings")
+            server_url: str = os.getenv("OLLAMA_SERVER_URL", "http://localhost:11434")
+            embeddings_model: str = os.getenv("OLLAMA_EMBEDDINGS_MODEL", "all-minilm")
+            ai_model: str = os.getenv("OLLAMA_AI_MODEL", "llama3.2:1b")
+            model_temperature: str = parse_float(os.getenv("OLLAMA_MODEL_TEMPERATURE", "0"))
+
+            self.llm_models["ollama"] = {
+                "embeddings": llm.get_ollama_embeddings_model(server_url, embeddings_model),
+                "llm": llm.get_ollama_model(server_url, ai_model, model_temperature),
+            }
+
+        if "openai" in self.enabled_llm_providers:
+            logger.info("Using OpenAI for LLM and embeddings")
+            api_key: str = os.getenv("OPENAI_API_KEY")
+            if not api_key:
+                raise ValueError("OPENAI_API_KEY is required when LLM is 'openai'")
+            embeddings_model: str = os.getenv("OPENAI_EMBEDDINGS_MODEL", "text-embedding-3-small")
+            ai_model: str = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+            model_temperature: str = parse_float(os.getenv("OPENAI_MODEL_TEMPERATURE", "0"))
+            self.llm_models["openai"] = {
+                "embeddings": llm.get_openai_embeddings_model(api_key, embeddings_model),
+                "llm": llm.get_openai_model(api_key, ai_model, model_temperature),
+            }
+
+    def get_embeddings_model(self, provider: str) -> Embeddings:
+        if provider in self.llm_models:
+            return self.llm_models[provider]["embeddings"]
+        else:
+            raise ValueError(f"The provider {provider} is not in the list of enabled providers {self.enabled_llm_providers}")  # noqa: E501
+
+    def get_ai_model(self, provider: str) -> BaseChatModel:
+        if provider in self.llm_models:
+            return self.llm_models[provider]["llm"]
+        else:
+            raise ValueError(f"The provider {provider} is not in the list of enabled providers {self.enabled_llm_providers}")  # noqa: E501
 
 
 settings = _Settings()

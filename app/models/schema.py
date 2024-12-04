@@ -6,6 +6,7 @@ class SummaryRequest(BaseModel):
 
     summary_type: str
     text: str
+    llm_provider: str
 
 
 class QuestionRequest(BaseModel):
@@ -14,3 +15,4 @@ class QuestionRequest(BaseModel):
     question: str
     use_rag: bool
     rag_retrieve_threshold: float
+    llm_provider: str

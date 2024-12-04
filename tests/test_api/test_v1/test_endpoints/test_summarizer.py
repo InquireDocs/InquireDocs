@@ -74,6 +74,7 @@ def test_summarize_successful(mock_generate):
     test_request = SummaryRequest(
         summary_type="concise",
         text="This is a long text that needs to be summarized.",
+        llm_provider="test_ai",
     )
     expected_summary = "This is a summary."
 
@@ -89,7 +90,7 @@ def test_summarize_successful(mock_generate):
 @patch("app.api.v1.endpoints.summarizer.generate_summary")
 def test_summarize_empty_text(mock_generate):
     """Test summarization with empty text"""
-    test_request = SummaryRequest(text="", summary_type="concise")
+    test_request = SummaryRequest(text="", summary_type="concise", llm_provider="test_ai")
 
     mock_generate.side_effect = ValueError("Text cannot be empty")
 
@@ -104,7 +105,9 @@ def test_summarize_empty_text(mock_generate):
 def test_summarize_invalid_type(mock_generate):
     """Test summarization with invalid summary type"""
     test_request = SummaryRequest(
-        text="Some text to summarize", summary_type="invalid_type"
+        text="Some text to summarize",
+        summary_type="invalid_type",
+        llm_provider="test_ai",
     )
 
     mock_generate.side_effect = ValueError("Invalid summary type")
@@ -120,7 +123,9 @@ def test_summarize_invalid_type(mock_generate):
 def test_summarize_service_error(mock_generate):
     """Test handling of service errors"""
     test_request = SummaryRequest(
-        text="Some text to summarize", summary_type="concise"
+        text="Some text to summarize",
+        summary_type="concise",
+        llm_provider="test_ai",
     )
 
     mock_generate.side_effect = Exception("Service error")
