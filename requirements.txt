@@ -8,7 +8,7 @@ langchain==0.3.10
 langchain-aws==0.2.9
 langchain-community==0.3.10
 langchain-core==0.3.22
-langchain-openai==0.2.11
+langchain-openai==0.2.12
 langchain-ollama==0.2.1
 # langchain-postgres==0.0.12
 
