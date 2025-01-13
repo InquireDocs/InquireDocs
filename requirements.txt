@@ -1,16 +1,16 @@
 # General
 fastapi==0.115.6
-pydantic==2.10.3
-uvicorn[standard]==0.32.1
+pydantic==2.10.5
+uvicorn[standard]==0.34.0
 
 # Langchain
-langchain==0.3.11
-langchain-aws==0.2.9
-langchain-community==0.3.11
-langchain-core==0.3.24
-langchain-openai==0.2.12
+langchain==0.3.14
+langchain-aws==0.2.10
 langchain-chroma==0.1.4
-langchain-ollama==0.2.1
+langchain-community==0.3.14
+langchain-core==0.3.29
+langchain-openai==0.3.0
+langchain-ollama==0.2.2
 # langchain-postgres==0.0.12
 
 # Sources
