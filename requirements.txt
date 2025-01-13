@@ -9,6 +9,7 @@ langchain-aws==0.2.9
 langchain-community==0.3.11
 langchain-core==0.3.24
 langchain-openai==0.2.12
+langchain-chroma==0.1.4
 langchain-ollama==0.2.1
 # langchain-postgres==0.0.12
 
@@ -16,5 +17,6 @@ langchain-ollama==0.2.1
 # pypdf==5.1.0
 
 # Database
+chromadb==0.5.23
 # pgvector==0.2.5
 # psycopg-binary==3.2.3

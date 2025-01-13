@@ -85,6 +85,12 @@ class _Settings:
                 "llm": llm.get_openai_model(api_key, ai_model, model_temperature),
             }
 
+        embeddings_model_for_vector_db: str = os.getenv("EMBEDDINGS_MODEL_VECTOR_DB", "ollama")
+        if embeddings_model_for_vector_db in self.llm_models.keys():
+            self.database_embeddings_model = self.llm_models[embeddings_model_for_vector_db].get("embeddings")  # noqa: E501
+        else:
+            self.database_embeddings_model = None
+
     def get_embeddings_model(self, provider: str) -> Embeddings:
         if provider in self.llm_models:
             return self.llm_models[provider]["embeddings"]
@@ -96,6 +102,10 @@ class _Settings:
             return self.llm_models[provider]["llm"]
         else:
             raise ValueError(f"The provider {provider} is not in the list of enabled providers {self.enabled_llm_providers}")  # noqa: E501
+
+    def get_vector_store_embeddings_model(self) -> Embeddings:
+        """Returns the embeddings model that will be used for the vector store."""
+        return self.database_embeddings_model
 
 
 settings = _Settings()
