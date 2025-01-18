@@ -1,0 +1,26 @@
+## Common Values
+namespace: {}
+
+
+## Deployment Values
+deployment_name: {}
+replicas: {}
+
+image: 
+  name: {}
+  tag: {}
+
+container:
+  name: {}
+  port: {}
+  image_pull_policy: {}
+
+## Service Values
+service_name: {}
+
+
+## Ingress Values
+ingress_name: {}
+cluster_issuer_name: {}
+host_name: {}
+certificate_secret_name: {}
