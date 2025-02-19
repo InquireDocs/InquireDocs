@@ -4,7 +4,7 @@ pydantic==2.10.6
 uvicorn[standard]==0.34.0
 
 # Langchain
-langchain==0.3.15
+langchain==0.3.19
 langchain-aws==0.2.13
 langchain-community==0.3.15
 langchain-core==0.3.36
