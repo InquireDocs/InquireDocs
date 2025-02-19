@@ -4,7 +4,7 @@ pytest-cov==6.0.0
 
 # Linting and Formatting
 flake8==7.1.2
-black==24.10.0
+black==25.1.0
 
 # Pre-commit
 pre-commit==4.1.0
