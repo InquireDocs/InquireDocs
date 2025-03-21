@@ -10,4 +10,4 @@ black==25.1.0
 pre-commit==4.2.0
 
 # Coverage
-coverage==7.7.0
+coverage==7.7.1
