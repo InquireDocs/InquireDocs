@@ -1,101 +1,58 @@
-import logging
-import os
+from typing import Optional
 
-from dotenv import load_dotenv
-from langchain_core.embeddings import Embeddings
-from langchain_core.language_models.chat_models import BaseChatModel
-
-from app.services import llm
+from pydantic import Field
+from pydantic_settings import BaseSettings
 
 
-logger = logging.getLogger(__name__)
+class Settings(BaseSettings):
+    debug: bool = Field(default=False)
 
-# Load environment variables from a .env file if it exists
-load_dotenv()
+    # Project settings
+    project_name: str = Field(default="InquireDocs")
 
+    # Generic AI
+    default_model_temperature: float = Field(default=0.0)
+    default_max_tokens: int = Field(default=100)
 
-def parse_bool(value: str):
-    """Helper function to parse a boolean environment variable."""
-    logger.info("Parsing boolean variable. Value: %s", value)
-    return value.lower() == "true"
+    # OpenAI
+    openai_api_key: Optional[str] = Field(default=None)
+    openai_default_embeddings_model: Optional[str] = Field(default="text-embedding-3-small")
+    openai_default_model: Optional[str] = Field(default="gpt-4o-mini")
 
+    # Ollama
+    ollama_base_url: Optional[str] = Field(default="http://localhost:11434")
+    ollama_default_embeddings_model: Optional[str] = Field(default="all-minilm")
+    ollama_default_model: Optional[str] = Field(default="llama3.2:1b")
 
-def parse_int(value: str):
-    """Helper function to parse an integer environment variable with a custom
-    exception.
-    """
-    try:
-        return int(value)
-    except (TypeError, ValueError) as e:
-        raise ValueError(f"Invalid integer value: {value}") from e
+    # Available services based on provided credentials
+    @property
+    def available_llm_providers(self):
+        providers = []
+        if self.openai_api_key:
+            providers.append("openai")
+        providers.append("ollama")  # Ollama is always available as it can run locally
+        return providers
 
+    # Chroma
+    # CHROMA_PERSIST_DIRECTORY: str = Field(
+    #     "/data/chroma",
+    #     description="Directory to persist Chroma DB"
+    # )
 
-def parse_float(value: str):
-    """Helper function to parse an float environment variable with a custom
-    exception.
-    """
-    try:
-        return float(value)
-    except (TypeError, ValueError) as e:
-        raise ValueError(f"Invalid float: {value}") from e
+    # # Available services based on provided credentials
+    # @property
+    # def available_llm_providers(self):
+    #     providers = []
+    #     if self.OPENAI_API_KEY:
+    #         providers.append("openai")
+    #     if self.ANTHROPIC_API_KEY:
+    #         providers.append("anthropic")
+    #     providers.append("ollama")  # Ollama is always available as it can run locally
+    #     return providers
 
-
-class _Settings:
-    """Application configuration via environment variables.
-
-    Picks up environment variables, check their type and map them
-    to a field in this class that can be accessed all over the
-    application.
-    """
-
-    def __init__(self):
-        self.load()
-
-    def load(self):
-        self.debug: bool = parse_bool(os.getenv("DEBUG", "false"))
-        self.project_name: str = os.getenv("PROJECT_NAME", "InquireDocs")
-        enabled_llm_providers: str = os.getenv("ENABLED_LLM_PROVIDERS", "ollama")
-
-        self.enabled_llm_providers = enabled_llm_providers.split(",")
-
-        self.llm_models = {}
-
-        if "ollama" in self.enabled_llm_providers:
-            logger.info("Using Ollama for LLM and embeddings")
-            server_url: str = os.getenv("OLLAMA_SERVER_URL", "http://localhost:11434")
-            embeddings_model: str = os.getenv("OLLAMA_EMBEDDINGS_MODEL", "all-minilm")
-            ai_model: str = os.getenv("OLLAMA_AI_MODEL", "llama3.2:1b")
-            model_temperature: str = parse_float(os.getenv("OLLAMA_MODEL_TEMPERATURE", "0"))
-
-            self.llm_models["ollama"] = {
-                "embeddings": llm.get_ollama_embeddings_model(server_url, embeddings_model),
-                "llm": llm.get_ollama_model(server_url, ai_model, model_temperature),
-            }
-
-        if "openai" in self.enabled_llm_providers:
-            logger.info("Using OpenAI for LLM and embeddings")
-            api_key: str = os.getenv("OPENAI_API_KEY")
-            if not api_key:
-                raise ValueError("OPENAI_API_KEY is required when LLM is 'openai'")
-            embeddings_model: str = os.getenv("OPENAI_EMBEDDINGS_MODEL", "text-embedding-3-small")
-            ai_model: str = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
-            model_temperature: str = parse_float(os.getenv("OPENAI_MODEL_TEMPERATURE", "0"))
-            self.llm_models["openai"] = {
-                "embeddings": llm.get_openai_embeddings_model(api_key, embeddings_model),
-                "llm": llm.get_openai_model(api_key, ai_model, model_temperature),
-            }
-
-    def get_embeddings_model(self, provider: str) -> Embeddings:
-        if provider in self.llm_models:
-            return self.llm_models[provider]["embeddings"]
-        else:
-            raise ValueError(f"The provider {provider} is not in the list of enabled providers {self.enabled_llm_providers}")  # noqa: E501
-
-    def get_ai_model(self, provider: str) -> BaseChatModel:
-        if provider in self.llm_models:
-            return self.llm_models[provider]["llm"]
-        else:
-            raise ValueError(f"The provider {provider} is not in the list of enabled providers {self.enabled_llm_providers}")  # noqa: E501
+    class Config:
+        env_file = ".env"
+        case_sensitive = True
 
 
-settings = _Settings()
+settings = Settings()
