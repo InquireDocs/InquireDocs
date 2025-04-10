@@ -1,18 +1,18 @@
 from typing import Dict, Type
 
+from app.core.config import settings
 from app.core.llm.base import BaseLLM
 from app.core.llm.openai import OpenAILLM
 from app.core.llm.ollama import OllamaLLM
-from app.core.config import settings
 
 # Factory for LLM providers
 _llm_providers: Dict[str, Type[BaseLLM]] = {
-    "openai": OpenAILLM,
     "ollama": OllamaLLM,
+    "openai": OpenAILLM,
 }
 
 # Available providers based on config
-available_providers = settings.available_llm_providers
+available_providers = settings.available_ai_providers
 
 
 def get_llm_provider(provider: str) -> BaseLLM:

@@ -26,7 +26,7 @@ class BaseLLM(ABC):
         self,
         query: str,
         model: Optional[str] = None,
-        temperature: float = 0.7,
+        temperature: Optional[float] = None,
         max_tokens: Optional[int] = None
     ) -> Dict[str, Any]:
         """

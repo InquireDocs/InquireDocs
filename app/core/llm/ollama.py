@@ -16,10 +16,6 @@ class OllamaLLM(BaseLLM):
     def __init__(self):
         """Initialize Ollama LLM from settings"""
         self.server_url = settings.ollama_base_url
-        self.default_embeddings_model = settings.ollama_default_embeddings_model
-        self.default_chat_model = settings.ollama_default_model
-        self.default_model_temperature = settings.default_model_temperature
-        self.default_max_tokens = settings.default_max_tokens
 
     @property
     def provider_name(self) -> str:
@@ -29,22 +25,22 @@ class OllamaLLM(BaseLLM):
         """Return the embeddings model"""
         return OllamaEmbeddings(
             base_url=self.server_url,
-            model=model_name or self.default_embeddings_model
+            model=model_name or settings.ollama_default_embeddings_model
         )
 
     async def ask(
         self,
         query: str,
         model: Optional[str] = None,
-        temperature: float = 0.7,
+        temperature: Optional[float] = None,
         max_tokens: Optional[int] = None
     ) -> Dict[str, Any]:
         """Ask a question to OpenAI"""
 
         # Use default values if none custom provided
-        model_name = model or self.default_chat_model
-        model_temperature = temperature or self.default_model_temperature
-        response_max_tokens = max_tokens or self.default_max_tokens
+        model_name = model or settings.ollama_default_model
+        model_temperature = temperature or settings.default_model_temperature
+        response_max_tokens = max_tokens or settings.default_max_tokens
 
         try:
             llm = ChatOllama(
@@ -54,10 +50,15 @@ class OllamaLLM(BaseLLM):
                 num_predict=response_max_tokens
             )
 
+            answer = llm.invoke([("human", query)])
+            logger.info(answer)
+
             return {
-                "response": llm.invoke([("human", query)]),
-                "model": model_name,
-                "provider": self.provider_name
+                "response": answer.content,
+                "model": answer.response_metadata["model"],
+                "provider": self.provider_name,
+                "temperature": model_temperature,
+                "response_max_tokens": response_max_tokens
             }
         except (ValueError, Exception) as e:
             msg = "Error generating answer"

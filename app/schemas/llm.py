@@ -1,9 +1,14 @@
-from pydantic import BaseModel, Field
 from typing import List, Optional
+
+from pydantic import BaseModel, Field
+
+
+class LLMAvailableProvidersResponse(BaseModel):
+    providers: List[str]
 
 
 class LLMRequest(BaseModel):
-    provider: str = Field(..., description="LLM provider: openai, anthropic, or ollama")
+    provider: str = Field(..., description="LLM provider: openai or ollama")
     query: str = Field(..., description="The question to ask the LLM")
     model: Optional[str] = Field(None, description="Specific model to use (optional)")
     temperature: Optional[float] = Field(0.7, description="Temperature for generation")
@@ -25,7 +30,5 @@ class LLMResponse(BaseModel):
     provider: str
     response: str
     model: Optional[str] = None
-
-
-class AvailableProvidersResponse(BaseModel):
-    providers: List[str]
+    temperature: float
+    response_max_tokens: int

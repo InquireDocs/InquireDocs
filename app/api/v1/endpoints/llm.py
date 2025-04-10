@@ -3,7 +3,7 @@ import logging
 from fastapi import APIRouter, HTTPException
 
 from app.core.llm import get_llm_provider, available_providers
-from app.schemas.llm import AvailableProvidersResponse, LLMRequest, LLMResponse
+from app.schemas.llm import LLMAvailableProvidersResponse, LLMRequest, LLMResponse
 
 
 logger = logging.getLogger(__name__)
@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 
-@router.get("/providers", response_model=AvailableProvidersResponse)
+@router.get("/providers", response_model=LLMAvailableProvidersResponse)
 async def get_available_providers():
     """Get all available LLM providers"""
     return {"providers": available_providers}
@@ -35,7 +35,9 @@ async def ask(request: LLMRequest):
         return LLMResponse(
             provider=result["provider"],
             response=result["response"],
-            model=result["model"]
+            model=result["model"],
+            temperature=result["temperature"],
+            response_max_tokens=result["response_max_tokens"]
         )
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e)) from e
