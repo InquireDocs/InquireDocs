@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 from typing import Optional, Dict, Any
 
 from langchain_core.embeddings import Embeddings
-# from langchain_core.language_models.chat_models import BaseChatModel
 
 
 class BaseLLM(ABC):
