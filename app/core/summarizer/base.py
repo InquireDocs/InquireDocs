@@ -1,8 +1,10 @@
 from abc import ABC, abstractmethod
 import logging
+import tempfile
 from typing import Optional, Dict, Any
 
 from langchain.chains.combine_documents import create_stuff_documents_chain
+from langchain_community.document_loaders import PyPDFLoader
 from langchain_core.prompts import PromptTemplate
 from langchain_core.documents import Document
 from langchain_core.language_models.chat_models import BaseChatModel
@@ -85,6 +87,36 @@ class BaseSummarizer(ABC):
 
             # Run summarize on the text
             docs = [Document(page_content=text)]
+            return stuff_chain.invoke({"context": docs})
+        except (ValueError, Exception) as e:
+            msg = "Error generating text summary"
+            logger.error("%s: %s", msg, e)
+            raise ValueError(msg) from e
+
+    async def generate_pdf_summary(
+            self,
+            summary_type: str,
+            llm: BaseChatModel,
+            file_content: bytes
+    ) -> str:
+        # Create temporary file to process the PDF
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as temp_file:
+            temp_file.write(file_content)
+            temp_file_path = temp_file.name
+
+        try:
+            # Define prompt
+            summary_type_details = get_summary_type_details(summary_type)
+            prompt_template = summary_type_details.get("prompt")
+            prompt = PromptTemplate.from_template(prompt_template)
+
+            # Load PDF
+            loader = PyPDFLoader(temp_file_path)
+            docs = loader.load()
+
+            # Define StuffDocumentsChain
+            stuff_chain = create_stuff_documents_chain(llm, prompt)
+
             return stuff_chain.invoke({"context": docs})
         except (ValueError, Exception) as e:
             msg = "Error generating text summary"

@@ -70,74 +70,31 @@ class OpenAISummarizer(BaseSummarizer):
         max_length: int = settings.default_max_tokens,
     ) -> Dict[str, Any]:
         """Summarize PDF using OpenAI"""
-        pass
-        # # Use default model if none provided
-        # model_name = model or self.default_model
+        try:
+            # Prepare LLM
+            llm = ChatOpenAI(
+                api_key=self.api_key,
+                temperature=temperature,
+                model_name=model,
+                max_tokens=max_length
+            )
 
-        # # Create temporary file to process the PDF
-        # with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as temp_file:
-        #     temp_file.write(file_content)
-        #     temp_file_path = temp_file.name
+            generated_summary = await self.generate_pdf_summary(
+                summary_type=summary_type,
+                llm=llm,
+                file_content=file_content
+            )
 
-        # try:
-        #     # Load PDF
-        #     loader = PyPDFLoader(temp_file_path)
-        #     documents = loader.load()
-
-        #     # Combine all text from the PDF
-        #     text = " ".join([doc.page_content for doc in documents])
-
-        #     # For very large PDFs, we might want to split and summarize in chunks
-        #     if len(text) > 100000:  # If text is very large
-        #         # Split text
-        #         text_splitter = RecursiveCharacterTextSplitter(
-        #             chunk_size=50000,
-        #             chunk_overlap=5000
-        #         )
-        #         chunks = text_splitter.split_text(text)
-
-        #         # Summarize each chunk
-        #         summaries = []
-        #         for chunk in chunks:
-        #             chunk_summary = await self.summarize_text(
-        #                 text=chunk,
-        #                 model=model_name,
-        #                 max_length=max(100, max_length // len(chunks))
-        #             )
-        #             summaries.append(chunk_summary["summary"])
-
-        #         # Combine summaries and create a final summary
-        #         combined_summary = " ".join(summaries)
-        #         final_summary = await self.summarize_text(
-        #             text=combined_summary,
-        #             model=model_name,
-        #             max_length=max_length
-        #         )
-
-        #         result = final_summary
-        #         result["source"] = "pdf"
-
-        #         return result
-        #     else:
-        #         # Prepare prompt for summarization
-        #         prompt = f"Please the PDF document in {max_length} words:\n\n{text}"
-
-        #         completion = self.client.chat.completions.create(
-        #             model=model_name,
-        #             messages=[
-        #                 {"role": "user", "content": prompt}
-        #             ],
-        #             temperature=0.5
-        #         )
-
-        #         return {
-        #             "summary": completion.choices[0].message.content,
-        #             "model": model_name,
-        #             "provider": self.provider_name,
-        #             "source": "pdf"
-        #         }
-
-        # finally:
-        #     # Clean up temp file
-        #     if os.path.exists(temp_file_path):
-        #         os.unlink(temp_file_path)
+            return {
+                "model": model,
+                "provider": self.provider_name,
+                "response_max_tokens": max_length,
+                "summary": generated_summary,
+                "summary_type": summary_type,
+                "source": "pdf",
+                "temperature": temperature
+            }
+        except (ValueError, Exception) as e:
+            msg = "Error summarizing PDF document"
+            logger.error("%s: %s", msg, e)
+            raise ValueError(msg) from e

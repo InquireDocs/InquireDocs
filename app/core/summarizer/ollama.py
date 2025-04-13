@@ -70,82 +70,31 @@ class OllamaSummarizer(BaseSummarizer):
         max_length: Optional[int] = settings.default_model_temperature,
     ) -> Dict[str, Any]:
         """Summarize PDF using Ollama"""
-        pass
-        # # Use default model if none provided
-        # model_name = model or self.default_model
+        try:
+            # Prepare LLM
+            llm = ChatOllama(
+                base_url=self.server_url,
+                model=model,
+                temperature=temperature,
+                num_predict=max_length
+            )
 
-        # # Create temporary file to process the PDF
-        # with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as temp_file:
-        #     temp_file.write(file_content)
-        #     temp_file_path = temp_file.name
+            generated_summary = await self.generate_pdf_summary(
+                summary_type=summary_type,
+                llm=llm,
+                file_content=file_content
+            )
 
-        # try:
-        #     # Load PDF
-        #     loader = PyPDFLoader(temp_file_path)
-        #     documents = loader.load()
-
-        #     # Combine all text from the PDF
-        #     text = " ".join([doc.page_content for doc in documents])
-
-        #     # For very large PDFs, we might want to split and summarize in chunks
-        #     if len(text) > 100000:  # If text is very large
-        #         # Split text
-        #         text_splitter = RecursiveCharacterTextSplitter(
-        #             chunk_size=50000,
-        #             chunk_overlap=5000
-        #         )
-        #         chunks = text_splitter.split_text(text)
-
-        #         # Summarize each chunk
-        #         summaries = []
-        #         for chunk in chunks:
-        #             chunk_summary = await self.summarize_text(
-        #                 text=chunk,
-        #                 model=model_name,
-        #                 max_length=max(100, max_length // len(chunks))
-        #             )
-        #             summaries.append(chunk_summary["summary"])
-
-        #         # Combine summaries and create a final summary
-        #         combined_summary = " ".join(summaries)
-        #         final_summary = await self.summarize_text(
-        #             text=combined_summary,
-        #             model=model_name,
-        #             max_length=max_length
-        #         )
-
-        #         result = final_summary
-        #         result["source"] = "pdf"
-
-        #         return result
-        #     else:
-        #         # Prepare prompt for summarization
-        #         prompt = f"summarize the PDF document in {max_length} words:\n\n{text}"
-
-        #         # Prepare request data
-        #         request_data = {
-        #             "model": model_name,
-        #             "prompt": prompt,
-        #             "temperature": 0.5,
-        #         }
-
-        #         async with httpx.AsyncClient() as client:
-        #             response = await client.post(
-        #                 f"{self.base_url}/api/generate",
-        #                 json=request_data,
-        #                 timeout=90.0  # Longer timeout for PDF processing
-        #             )
-        #             response.raise_for_status()
-        #             result = response.json()
-
-        #         return {
-        #             "summary": result.get("response", ""),
-        #             "model": model_name,
-        #             "provider": self.provider_name,
-        #             "source": "pdf"
-        #         }
-
-        # finally:
-        #     # Clean up temp file
-        #     if os.path.exists(temp_file_path):
-        #         os.unlink(temp_file_path)
+            return {
+                "model": model,
+                "provider": self.provider_name,
+                "response_max_tokens": max_length,
+                "summary": generated_summary,
+                "summary_type": summary_type,
+                "source": "pdf",
+                "temperature": temperature
+            }
+        except (ValueError, Exception) as e:
+            msg = "Error summarizing PDF document"
+            logger.error("%s: %s", msg, e)
+            raise ValueError(msg) from e
