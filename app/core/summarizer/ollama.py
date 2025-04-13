@@ -1,11 +1,6 @@
-# import httpx
 import logging
-# import os
-# import tempfile
 from typing import Optional, Dict, Any
 
-# from langchain.document_loaders import PyPDFLoader
-# from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_ollama import ChatOllama
 
 from app.core.config import settings

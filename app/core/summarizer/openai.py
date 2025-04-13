@@ -1,10 +1,6 @@
-# import os
 import logging
-# import tempfile
 from typing import Optional, Dict, Any
 
-# from langchain.document_loaders import PyPDFLoader
-# from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_openai import ChatOpenAI
 
 from app.core.config import settings
