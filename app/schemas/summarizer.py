@@ -30,7 +30,7 @@ class TextSummaryRequest(BaseModel):
         description="Maximum summary length (optional)"
     )
 
-    class Config:
+    class ConfigDict:
         json_schema_extra = {
             "example": {
                 "provider": "ollama",

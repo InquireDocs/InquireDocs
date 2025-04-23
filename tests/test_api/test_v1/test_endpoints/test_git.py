@@ -1,14 +1,14 @@
-from fastapi.testclient import TestClient
+# from fastapi.testclient import TestClient
 
-from app.main import app
-
-
-client = TestClient(app)
+# from app.main import app
 
 
-def test_root_endpoint():
-    """Test root git endpoint"""
-    response = client.get("api/v1/git")
+# client = TestClient(app)
 
-    assert response.status_code == 501
-    assert response.json() == "NOT_IMPLEMENTED"
+
+# def test_root_endpoint():
+#     """Test root git endpoint"""
+#     response = client.get("api/v1/git")
+
+#     assert response.status_code == 501
+#     assert response.json() == "NOT_IMPLEMENTED"

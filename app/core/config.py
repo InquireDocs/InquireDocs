@@ -40,7 +40,7 @@ class Settings(BaseSettings):
     #     description="Directory to persist Chroma DB"
     # )
 
-    class Config:
+    class ConfigDict:
         env_file = ".env"
         case_sensitive = True
 

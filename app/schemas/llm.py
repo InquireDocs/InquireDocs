@@ -14,7 +14,7 @@ class LLMRequest(BaseModel):
     temperature: Optional[float] = Field(0.7, description="Temperature for generation")
     max_tokens: Optional[int] = Field(None, description="Maximum tokens to generate")
 
-    class Config:
+    class ConfigDict:
         json_schema_extra = {
             "example": {
                 "provider": "openai",
