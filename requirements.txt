@@ -5,7 +5,7 @@ uvicorn[standard]==0.34.2
 
 # Langchain
 langchain==0.3.24
-langchain-aws==0.2.21
+langchain-aws==0.2.22
 langchain-community==0.3.22
 langchain-core==0.3.56
 langchain-openai==0.3.14
