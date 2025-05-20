@@ -28,10 +28,11 @@ class Settings(BaseSettings):
     # Available AI providers based on provided credentials
     @property
     def available_ai_providers(self):
-        providers = []
+        providers = ["ollama"]  # Ollama is always available as it can run locally
+
         if self.openai_api_key:
             providers.append("openai")
-        providers.append("ollama")  # Ollama is always available as it can run locally
+
         return providers
 
     # Chroma
