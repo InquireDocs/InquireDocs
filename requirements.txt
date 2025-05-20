@@ -1,6 +1,6 @@
 # General
 fastapi==0.115.12
-pydantic==2.11.3
+pydantic==2.11.4
 uvicorn[standard]==0.34.2
 
 # Langchain
