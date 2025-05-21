@@ -2,7 +2,8 @@ import logging
 
 from fastapi import APIRouter, HTTPException
 
-from app.core.llm import get_llm_provider, available_providers
+from app.core.config import settings
+from app.core.llm import get_llm_provider
 from app.schemas.llm import LLMAvailableProvidersResponse, LLMRequest, LLMResponse
 
 
@@ -14,7 +15,7 @@ router = APIRouter()
 @router.get("/providers", response_model=LLMAvailableProvidersResponse)
 async def get_available_providers():
     """Get all available LLM providers"""
-    return {"providers": available_providers}
+    return {"providers": settings.available_ai_providers}
 
 
 @router.post("/ask", response_model=LLMResponse)

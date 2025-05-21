@@ -115,13 +115,13 @@
 # def test_debug_mode():
 #     with patch.dict(os.environ, {"DEBUG": "true"}):
 #         settings.load()
-#         assert settings.debug is True
+#         assert settings.DEBUG is True
 
 
-# def test_set_project_name():
+# def test_set_PROJECT_NAME():
 #     with patch.dict(os.environ, {"PROJECT_NAME": "Test Project"}):
 #         settings.load()
-#         assert settings.project_name == "Test Project"
+#         assert settings.PROJECT_NAME == "Test Project"
 
 
 # def test_default_settings():
@@ -129,8 +129,8 @@
 
 #     settings_instance = settings  # Ensure singleton-like behavior
 
-#     assert settings_instance.debug is False
-#     assert settings_instance.project_name == "InquireDocs"
+#     assert settings_instance.DEBUG is False
+#     assert settings_instance.PROJECT_NAME == "InquireDocs"
 #     assert settings_instance.enabled_llm_providers == ["ollama"]
 
 #     embeddings_model = settings_instance.get_embeddings_model("ollama")
@@ -159,8 +159,8 @@
 
 #         settings_instance = settings  # Ensure singleton-like behavior
 
-#         assert settings_instance.debug is False
-#         assert settings_instance.project_name == "InquireDocs"
+#         assert settings_instance.DEBUG is False
+#         assert settings_instance.PROJECT_NAME == "InquireDocs"
 #         assert settings_instance.enabled_llm_providers == ["ollama"]
 
 #         embeddings_model = settings_instance.get_embeddings_model("ollama")

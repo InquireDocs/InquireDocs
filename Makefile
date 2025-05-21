@@ -3,7 +3,7 @@ SHELL = /bin/bash
 MAKEFLAGS += --no-builtin-rules
 
 # Variables
-VENV_DIR = .venv
+VENV_DIR = venv
 BLACK = $(VENV_DIR)/bin/black
 FLAKE8 = $(VENV_DIR)/bin/flake8
 PIP = $(VENV_DIR)/bin/pip
@@ -53,7 +53,7 @@ format: venv ## Format code with black
 
 # Testing
 # test: install-dev-deps ## Run application tests
-test: venv ## Run application tests
+test: ## Run application tests
 	@echo "Running unit tests"
 	@$(PYTEST)
 

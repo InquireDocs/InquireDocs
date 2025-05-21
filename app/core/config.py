@@ -1,7 +1,7 @@
 from typing import Optional
 
 from pydantic import Field
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     # Generic AI
     default_summary_type: str = Field(default="concise")
     default_model_temperature: float = Field(default=0.0)
-    default_max_tokens: int = Field(default=100)
+    default_max_tokens: int = Field(default=1000)
 
     # OpenAI
     openai_api_key: Optional[str] = Field(default=None)
@@ -29,21 +29,11 @@ class Settings(BaseSettings):
     @property
     def available_ai_providers(self):
         providers = ["ollama"]  # Ollama is always available as it can run locally
-
         if self.openai_api_key:
             providers.append("openai")
-
         return providers
 
-    # Chroma
-    # CHROMA_PERSIST_DIRECTORY: str = Field(
-    #     "/data/chroma",
-    #     description="Directory to persist Chroma DB"
-    # )
-
-    class ConfigDict:
-        env_file = ".env"
-        case_sensitive = True
+    model_config = SettingsConfigDict(env_file='.env', case_sensitive=False)
 
 
 settings = Settings()

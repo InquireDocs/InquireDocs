@@ -11,9 +11,6 @@ _llm_providers: Dict[str, Type[BaseLLM]] = {
     "openai": OpenAILLM,
 }
 
-# Available providers based on config
-available_providers = settings.available_ai_providers
-
 
 def get_llm_provider(provider: str) -> BaseLLM:
     """
@@ -28,6 +25,8 @@ def get_llm_provider(provider: str) -> BaseLLM:
     Raises:
         ValueError: If the provider is not available or not supported
     """
+    available_providers = settings.available_ai_providers
+
     if provider not in available_providers:
         raise ValueError(f"Provider {provider} not available or not configured")
 

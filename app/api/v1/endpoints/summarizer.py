@@ -2,10 +2,11 @@ import logging
 
 from fastapi import APIRouter, status, HTTPException, Depends
 
+from app.core.config import settings
+from app.core.summarizer import get_summary_provider
+from app.core.summarizer.summary_types import get_summary_types
 from app.schemas.summarizer import SummaryAvailableProvidersResponse, TextSummaryRequest
 from app.schemas.summarizer import PDFSummaryRequest, SummaryResponse
-from app.core.summarizer import available_providers, get_summary_provider
-from app.core.summarizer.summary_types import get_summary_types
 
 
 logger = logging.getLogger(__name__)
@@ -15,7 +16,7 @@ router = APIRouter()
 @router.get("/providers", response_model=SummaryAvailableProvidersResponse)
 async def get_available_providers():
     """Get all available summarizer providers"""
-    return {"providers": available_providers}
+    return {"providers": settings.available_ai_providers}
 
 
 @router.get("/types", status_code=status.HTTP_200_OK)

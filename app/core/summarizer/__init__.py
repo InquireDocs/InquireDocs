@@ -12,8 +12,6 @@ _summary_providers: Dict[str, Type[BaseSummarizer]] = {
     "openai": OpenAISummarizer,
 }
 
-available_providers = settings.available_ai_providers
-
 
 def get_summary_provider(provider: str) -> BaseSummarizer:
     """
@@ -28,6 +26,8 @@ def get_summary_provider(provider: str) -> BaseSummarizer:
     Raises:
         ValueError: If the provider is not available or not supported
     """
+    available_providers = settings.available_ai_providers
+
     if provider not in available_providers:
         raise ValueError(f"Provider {provider} not available or not configured")
 
