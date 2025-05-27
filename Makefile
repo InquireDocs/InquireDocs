@@ -3,7 +3,7 @@ SHELL = /bin/bash
 MAKEFLAGS += --no-builtin-rules
 
 # Variables
-VENV_DIR = venv
+VENV_DIR = .venv
 BLACK = $(VENV_DIR)/bin/black
 FLAKE8 = $(VENV_DIR)/bin/flake8
 PIP = $(VENV_DIR)/bin/pip
