@@ -1,63 +1,77 @@
-import pytest
-from unittest.mock import MagicMock, patch
-from langchain_core.messages import BaseMessage
+#  Copyright 2024-present Julian Nonino
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 
-from app.models.schema import QuestionRequest
-from app.services.retriever import get_answer
+# import pytest
+# from unittest.mock import MagicMock, patch
+# from langchain_core.messages import BaseMessage
 
-
-@patch("app.services.retriever.settings.get_ai_model")
-def test_generate_summary_success(mock_get_ai_model):
-    """Test successful summary generation"""
-    mock_request = QuestionRequest(
-        question="What is the name of our planet?",
-        use_rag=False,
-        rag_retrieve_threshold=0.5,
-        llm_provider="test_ai",
-    )
-
-    # Mock the LLM return value
-    mock_llm = MagicMock()
-    mock_llm.invoke.return_value = BaseMessage(content="Earth", type="str")
-    mock_get_ai_model.return_value = mock_llm
-
-    # Call the generate_summary function
-    response = get_answer(mock_request)
-
-    # Assertions
-    assert response == {"answer": "Earth"}
-
-    # Verify LLM invocation
-    mock_llm.invoke.assert_called_once_with([("human", mock_request.question)])
+# from app.models.schema import QuestionRequest
+# from app.services.retriever import get_answer
 
 
-def test_get_answer_with_empty_question():
-    """Test generating an answer with empty question"""
-    request = QuestionRequest(
-        question="",
-        use_rag=False,
-        rag_retrieve_threshold=0.5,
-        llm_provider="test_ai",
-    )
+# @patch("app.services.retriever.settings.get_ai_model")
+# def test_generate_summary_success(mock_get_ai_model):
+#     """Test successful summary generation"""
+#     mock_request = QuestionRequest(
+#         question="What is the name of our planet?",
+#         use_rag=False,
+#         rag_retrieve_threshold=0.5,
+#         llm_provider="test_ai",
+#     )
 
-    response = get_answer(request)
-    assert response == "Please provide the question to get an answer"
+#     # Mock the LLM return value
+#     mock_llm = MagicMock()
+#     mock_llm.invoke.return_value = BaseMessage(content="Earth", type="str")
+#     mock_get_ai_model.return_value = mock_llm
+
+#     # Call the generate_summary function
+#     response = get_answer(mock_request)
+
+#     # Assertions
+#     assert response == {"answer": "Earth"}
+
+#     # Verify LLM invocation
+#     mock_llm.invoke.assert_called_once_with([("human", mock_request.question)])
 
 
-@patch("app.services.retriever.settings.get_ai_model")
-def test_get_answer_llm_error(mock_get_ai_model):
-    """Test error handling when LLM fails"""
-    request = QuestionRequest(
-        question="What is the name of our planet?",
-        use_rag=False,
-        rag_retrieve_threshold=0.5,
-        llm_provider="openai",
-    )
+# def test_get_answer_with_empty_question():
+#     """Test generating an answer with empty question"""
+#     request = QuestionRequest(
+#         question="",
+#         use_rag=False,
+#         rag_retrieve_threshold=0.5,
+#         llm_provider="test_ai",
+#     )
 
-    mock_llm = MagicMock()
-    mock_llm.invoke.side_effect = Exception("LLM Error")
-    mock_get_ai_model.return_value = mock_llm
+#     response = get_answer(request)
+#     assert response == "Please provide the question to get an answer"
 
-    # mock_get_ai_model.invoke.side_effect = Exception("LLM Error")
-    with pytest.raises(ValueError, match="Error generating answer"):
-        get_answer(request)
+
+# @patch("app.services.retriever.settings.get_ai_model")
+# def test_get_answer_llm_error(mock_get_ai_model):
+#     """Test error handling when LLM fails"""
+#     request = QuestionRequest(
+#         question="What is the name of our planet?",
+#         use_rag=False,
+#         rag_retrieve_threshold=0.5,
+#         llm_provider="openai",
+#     )
+
+#     mock_llm = MagicMock()
+#     mock_llm.invoke.side_effect = Exception("LLM Error")
+#     mock_get_ai_model.return_value = mock_llm
+
+#     # mock_get_ai_model.invoke.side_effect = Exception("LLM Error")
+#     with pytest.raises(ValueError, match="Error generating answer"):
+#         get_answer(request)

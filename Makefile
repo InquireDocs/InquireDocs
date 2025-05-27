@@ -53,7 +53,7 @@ format: venv ## Format code with black
 
 # Testing
 # test: install-dev-deps ## Run application tests
-test: venv ## Run application tests
+test: ## Run application tests
 	@echo "Running unit tests"
 	@$(PYTEST)
 

@@ -11,15 +11,18 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-from fastapi import APIRouter
+from importlib import reload
+import logging
+from unittest.mock import patch
 
-# from app.api.v1.endpoints.git import router as git_router
-from app.api.v1.endpoints.llm import router as llm_router
-from app.api.v1.endpoints.summarizer import router as summarizer_router
+from app.core.config import Settings
+import app.core.logging_config as logger_configuration
 
 
-router = APIRouter()
-
-# router.include_router(git_router, prefix="/git", tags=["git"])
-router.include_router(llm_router, prefix="/llm", tags=["retriever"])
-router.include_router(summarizer_router, prefix="/summarizer", tags=["summarizer"])
+def test_logger_configuration_debug_enabled(monkeypatch):
+    """Test basic logger configuration with DEBUG flag set to true"""
+    monkeypatch.setenv("DEBUG", "true")
+    with patch("app.core.config.settings") as test_settings:
+        test_settings.return_value = Settings(_env_file=None)
+        reload(logger_configuration)
+        assert logging.getLogger().level == logging.DEBUG
