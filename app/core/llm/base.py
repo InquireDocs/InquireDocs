@@ -27,10 +27,7 @@ class BaseLLM(ABC):
         pass
 
     @abstractmethod
-    def get_embeddings_provider(
-        self,
-        model_name: Optional[str] = None
-    ) -> Embeddings:
+    def get_embeddings_provider(self, model_name: Optional[str] = None) -> Embeddings:
         pass
 
     @abstractmethod
@@ -39,7 +36,7 @@ class BaseLLM(ABC):
         query: str,
         model: Optional[str] = None,
         temperature: Optional[float] = None,
-        max_tokens: Optional[int] = None
+        max_tokens: Optional[int] = None,
     ) -> Dict[str, Any]:
         """
         Ask a question to the LLM

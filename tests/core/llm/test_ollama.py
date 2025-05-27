@@ -32,14 +32,13 @@ def test_ollama_initialization(ollama_llm):
 
 def test_get_embeddings_provider(ollama_llm):
     """Test getting embeddings provider"""
-    with patch('app.core.llm.ollama.OllamaEmbeddings') as mock_embeddings:
+    with patch("app.core.llm.ollama.OllamaEmbeddings") as mock_embeddings:
         # Create a configuration to test
         ollama_llm.get_embeddings_provider()
 
         # Check if OllamaEmbeddings was initialized correctly
         mock_embeddings.assert_called_once_with(
-            base_url=settings.ollama_base_url,
-            model=settings.ollama_default_embeddings_model
+            base_url=settings.ollama_base_url, model=settings.ollama_default_embeddings_model
         )
 
         # Test with a custom model
@@ -47,10 +46,7 @@ def test_get_embeddings_provider(ollama_llm):
         ollama_llm.get_embeddings_provider(model_name=custom_model)
 
         # Check if OllamaEmbeddings was initialized with the custom model
-        mock_embeddings.assert_called_with(
-            base_url=settings.ollama_base_url,
-            model=custom_model
-        )
+        mock_embeddings.assert_called_with(base_url=settings.ollama_base_url, model=custom_model)
 
 
 @pytest.mark.asyncio
@@ -59,7 +55,7 @@ async def test_ask_with_default_parameters(ollama_llm):
     query = "What is the meaning of life?"
 
     # Mock the ChatOllama class
-    with patch('app.core.llm.ollama.ChatOllama') as mock_chat_ollama:
+    with patch("app.core.llm.ollama.ChatOllama") as mock_chat_ollama:
         # Create a mock for the response
         mock_response = MagicMock()
         mock_response.content = "The meaning of life is 42."
@@ -77,7 +73,7 @@ async def test_ask_with_default_parameters(ollama_llm):
             base_url=settings.ollama_base_url,
             model=settings.ollama_default_model,
             temperature=settings.default_model_temperature,
-            num_predict=settings.default_max_tokens
+            num_predict=settings.default_max_tokens,
         )
 
         # Check if invoke was called with the right parameters
@@ -100,7 +96,7 @@ async def test_ask_with_custom_parameters(ollama_llm):
     custom_max_tokens = 500
 
     # Mock the ChatOllama class
-    with patch('app.core.llm.ollama.ChatOllama') as mock_chat_ollama:
+    with patch("app.core.llm.ollama.ChatOllama") as mock_chat_ollama:
         # Create a mock for the response
         mock_response = MagicMock()
         mock_response.content = "The meaning of life is 42."
@@ -112,10 +108,7 @@ async def test_ask_with_custom_parameters(ollama_llm):
 
         # Call the ask method with custom parameters
         result = await ollama_llm.ask(
-            query,
-            model=custom_model,
-            temperature=custom_temp,
-            max_tokens=custom_max_tokens
+            query, model=custom_model, temperature=custom_temp, max_tokens=custom_max_tokens
         )
 
         # Check if ChatOllama was initialized correctly with custom parameters
@@ -123,7 +116,7 @@ async def test_ask_with_custom_parameters(ollama_llm):
             base_url=settings.ollama_base_url,
             model=custom_model,
             temperature=custom_temp,
-            num_predict=custom_max_tokens
+            num_predict=custom_max_tokens,
         )
 
         # Check the returned response
@@ -138,7 +131,7 @@ async def test_ask_exception_handling(ollama_llm):
     query = "What is the meaning of life?"
 
     # Mock the ChatOllama class to raise an exception
-    with patch('app.core.llm.ollama.ChatOllama') as mock_chat_ollama:
+    with patch("app.core.llm.ollama.ChatOllama") as mock_chat_ollama:
         chat_instance = mock_chat_ollama.return_value
         chat_instance.invoke.side_effect = ValueError("Model not found")
 

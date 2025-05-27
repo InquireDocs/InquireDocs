@@ -37,7 +37,7 @@ class OpenAILLM(BaseLLM):
     def get_embeddings_provider(self, model_name: Optional[str] = None) -> OpenAIEmbeddings:
         return OpenAIEmbeddings(
             openai_api_key=self.api_key,
-            model=model_name or settings.openai_default_embeddings_model
+            model=model_name or settings.openai_default_embeddings_model,
         )
 
     async def ask(
@@ -45,7 +45,7 @@ class OpenAILLM(BaseLLM):
         query: str,
         model: Optional[str] = None,
         temperature: Optional[float] = None,
-        max_tokens: Optional[int] = None
+        max_tokens: Optional[int] = None,
     ) -> Dict[str, Any]:
         """Ask a question to OpenAI"""
 
@@ -59,7 +59,7 @@ class OpenAILLM(BaseLLM):
                 api_key=self.api_key,
                 temperature=model_temperature,
                 model_name=model_name,
-                max_tokens=response_max_tokens
+                max_tokens=response_max_tokens,
             )
 
             return {
@@ -67,7 +67,7 @@ class OpenAILLM(BaseLLM):
                 "model": model_name,
                 "provider": self.provider_name,
                 "temperature": model_temperature,
-                "response_max_tokens": response_max_tokens
+                "response_max_tokens": response_max_tokens,
             }
         except (ValueError, Exception) as e:
             msg = "Error generating answer"

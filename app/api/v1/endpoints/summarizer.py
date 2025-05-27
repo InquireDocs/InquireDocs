@@ -59,7 +59,7 @@ async def summarize_text(request: TextSummaryRequest):
             summary_type=request.summary_type,
             model=request.model,
             temperature=request.temperature,
-            max_length=request.max_length
+            max_length=request.max_length,
         )
 
         return SummaryResponse(
@@ -69,7 +69,7 @@ async def summarize_text(request: TextSummaryRequest):
             model=result["model"],
             response_max_tokens=result["response_max_tokens"],
             source=result["source"],
-            temperature=result["temperature"]
+            temperature=result["temperature"],
         )
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e)) from e
@@ -83,7 +83,7 @@ async def summarize_pdf(request: PDFSummaryRequest = Depends()):
     logger.debug("Summarize PDF document")
 
     # Validate file type
-    if not request.file.filename.lower().endswith('.pdf'):
+    if not request.file.filename.lower().endswith(".pdf"):
         raise HTTPException(status_code=400, detail="Only PDF files are supported")
 
     try:
@@ -100,7 +100,7 @@ async def summarize_pdf(request: PDFSummaryRequest = Depends()):
             summary_type=request.summary_type,
             model=request.model,
             temperature=request.temperature,
-            max_length=request.max_length
+            max_length=request.max_length,
         )
 
         return SummaryResponse(
@@ -110,7 +110,7 @@ async def summarize_pdf(request: PDFSummaryRequest = Depends()):
             model=result["model"],
             response_max_tokens=result["response_max_tokens"],
             source=result["source"],
-            temperature=result["temperature"]
+            temperature=result["temperature"],
         )
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e)) from e

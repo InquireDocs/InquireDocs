@@ -19,8 +19,10 @@ import pytest
 @pytest.fixture(autouse=True)
 def mock_settings():
     """Mock settings for all tests in this package"""
-    with patch('app.core.llm.ollama.settings') as mock_settings, \
-         patch('app.core.llm.openai.settings') as openai_mock_settings:
+    with (
+        patch("app.core.llm.ollama.settings") as mock_settings,
+        patch("app.core.llm.openai.settings") as openai_mock_settings,
+    ):
 
         # Mock Ollama settings
         mock_settings.ollama_base_url = "http://localhost:11434"

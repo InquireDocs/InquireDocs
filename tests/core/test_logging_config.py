@@ -21,8 +21,8 @@ import app.core.logging_config as logger_configuration
 
 def test_logger_configuration_debug_enabled(monkeypatch):
     """Test basic logger configuration with DEBUG flag set to true"""
-    monkeypatch.setenv('DEBUG', 'true')
-    with patch('app.core.config.settings') as test_settings:
+    monkeypatch.setenv("DEBUG", "true")
+    with patch("app.core.config.settings") as test_settings:
         test_settings.return_value = Settings(_env_file=None)
         reload(logger_configuration)
         assert logging.getLogger().level == logging.DEBUG

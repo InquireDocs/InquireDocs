@@ -49,7 +49,7 @@ class OllamaSummarizer(BaseSummarizer):
                 base_url=self.server_url,
                 model=model,
                 temperature=temperature,
-                num_predict=max_length
+                num_predict=max_length,
             )
 
             generated_summary = await self.generate_text_summary(summary_type, llm, text)
@@ -61,7 +61,7 @@ class OllamaSummarizer(BaseSummarizer):
                 "summary": generated_summary,
                 "summary_type": summary_type,
                 "source": "text",
-                "temperature": temperature
+                "temperature": temperature,
             }
         except (ValueError, Exception) as e:
             msg = "Error summarizing text"
@@ -84,13 +84,11 @@ class OllamaSummarizer(BaseSummarizer):
                 base_url=self.server_url,
                 model=model,
                 temperature=temperature,
-                num_predict=max_length
+                num_predict=max_length,
             )
 
             generated_summary = await self.generate_pdf_summary(
-                summary_type=summary_type,
-                llm=llm,
-                file_content=file_content
+                summary_type=summary_type, llm=llm, file_content=file_content
             )
 
             return {
@@ -100,7 +98,7 @@ class OllamaSummarizer(BaseSummarizer):
                 "summary": generated_summary,
                 "summary_type": summary_type,
                 "source": "pdf",
-                "temperature": temperature
+                "temperature": temperature,
             }
         except (ValueError, Exception) as e:
             msg = "Error summarizing PDF document"

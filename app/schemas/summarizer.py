@@ -27,20 +27,16 @@ class TextSummaryRequest(BaseModel):
     provider: str = Field("ollama", description="Provider: openai or ollama")
     text: str = Field(..., description="Text to summarize")
     summary_type: str = Field(
-        settings.default_summary_type,
-        description="Type of summary to generate (optional)"
+        settings.default_summary_type, description="Type of summary to generate (optional)"
     )
     model: Optional[str] = Field(
-        settings.ollama_default_model,
-        description="Specific model to use (optional)"
+        settings.ollama_default_model, description="Specific model to use (optional)"
     )
     temperature: Optional[float] = Field(
-        settings.default_model_temperature,
-        description="Model temperature to use (optional)"
+        settings.default_model_temperature, description="Model temperature to use (optional)"
     )
     max_length: Optional[int] = Field(
-        settings.default_max_tokens,
-        description="Maximum summary length (optional)"
+        settings.default_max_tokens, description="Maximum summary length (optional)"
     )
 
     class ConfigDict:
@@ -50,7 +46,7 @@ class TextSummaryRequest(BaseModel):
                 "summary_type": "concise",
                 "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
                 "model": settings.ollama_default_model,
-                "max_length": settings.default_max_tokens
+                "max_length": settings.default_max_tokens,
             }
         }
 
@@ -59,20 +55,16 @@ class PDFSummaryRequest(BaseModel):
     provider: str = Field("ollama", description="Provider: openai or ollama")
     file: UploadFile = File(..., description="PDF file to summarise")
     summary_type: str = Field(
-        settings.default_summary_type,
-        description="Type of summary to generate (optional)"
+        settings.default_summary_type, description="Type of summary to generate (optional)"
     )
     model: Optional[str] = Field(
-        settings.ollama_default_model,
-        description="Specific model to use (optional)"
+        settings.ollama_default_model, description="Specific model to use (optional)"
     )
     temperature: Optional[float] = Field(
-        settings.default_model_temperature,
-        description="Model temperature to use (optional)"
+        settings.default_model_temperature, description="Model temperature to use (optional)"
     )
     max_length: Optional[int] = Field(
-        settings.default_max_tokens,
-        description="Maximum summary length (optional)"
+        settings.default_max_tokens, description="Maximum summary length (optional)"
     )
 
 

@@ -13,9 +13,11 @@
 #  limitations under the License.
 import pytest
 from abc import ABC
+
 # from typing import Optional
 
 from app.core.llm.base import BaseLLM
+
 # from langchain_core.embeddings import Embeddings
 
 
@@ -31,7 +33,7 @@ def test_base_llm_is_abstract():
 def test_provider_name_is_abstract():
     """Test that provider_name is an abstract property"""
     # We need to access the actual property, not the getter
-    property_obj = BaseLLM.__dict__['provider_name']
+    property_obj = BaseLLM.__dict__["provider_name"]
     assert property_obj.fget.__isabstractmethod__
 
 

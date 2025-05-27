@@ -50,7 +50,7 @@ class OpenAISummarizer(BaseSummarizer):
                 api_key=self.api_key,
                 temperature=temperature,
                 model_name=model,
-                max_tokens=max_length
+                max_tokens=max_length,
             )
 
             generated_summary = await self.generate_text_summary(summary_type, llm, text)
@@ -62,7 +62,7 @@ class OpenAISummarizer(BaseSummarizer):
                 "summary": generated_summary,
                 "summary_type": summary_type,
                 "source": "text",
-                "temperature": temperature
+                "temperature": temperature,
             }
         except (ValueError, Exception) as e:
             msg = "Error summarizing text"
@@ -85,13 +85,11 @@ class OpenAISummarizer(BaseSummarizer):
                 api_key=self.api_key,
                 temperature=temperature,
                 model_name=model,
-                max_tokens=max_length
+                max_tokens=max_length,
             )
 
             generated_summary = await self.generate_pdf_summary(
-                summary_type=summary_type,
-                llm=llm,
-                file_content=file_content
+                summary_type=summary_type, llm=llm, file_content=file_content
             )
 
             return {
@@ -101,7 +99,7 @@ class OpenAISummarizer(BaseSummarizer):
                 "summary": generated_summary,
                 "summary_type": summary_type,
                 "source": "pdf",
-                "temperature": temperature
+                "temperature": temperature,
             }
         except (ValueError, Exception) as e:
             msg = "Error summarizing PDF document"

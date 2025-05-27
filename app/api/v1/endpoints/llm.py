@@ -43,7 +43,7 @@ async def ask(request: LLMRequest):
             query=request.query,
             model=request.model,
             temperature=request.temperature,
-            max_tokens=request.max_tokens
+            max_tokens=request.max_tokens,
         )
 
         return LLMResponse(
@@ -51,7 +51,7 @@ async def ask(request: LLMRequest):
             response=result["response"],
             model=result["model"],
             temperature=result["temperature"],
-            response_max_tokens=result["response_max_tokens"]
+            response_max_tokens=result["response_max_tokens"],
         )
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e)) from e

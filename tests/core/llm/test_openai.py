@@ -32,14 +32,13 @@ def test_openai_initialization(openai_llm):
 
 def test_get_embeddings_provider(openai_llm):
     """Test getting embeddings provider"""
-    with patch('app.core.llm.openai.OpenAIEmbeddings') as mock_embeddings:
+    with patch("app.core.llm.openai.OpenAIEmbeddings") as mock_embeddings:
         # Create a configuration to test
         openai_llm.get_embeddings_provider()
 
         # Check if OpenAIEmbeddings was initialized correctly
         mock_embeddings.assert_called_once_with(
-            openai_api_key=settings.openai_api_key,
-            model=settings.openai_default_embeddings_model
+            openai_api_key=settings.openai_api_key, model=settings.openai_default_embeddings_model
         )
 
         # Test with a custom model
@@ -48,8 +47,7 @@ def test_get_embeddings_provider(openai_llm):
 
         # Check if OpenAIEmbeddings was initialized with the custom model
         mock_embeddings.assert_called_with(
-            openai_api_key=settings.openai_api_key,
-            model=custom_model
+            openai_api_key=settings.openai_api_key, model=custom_model
         )
 
 
@@ -59,7 +57,7 @@ async def test_ask_with_default_parameters(openai_llm):
     query = "What is the meaning of life?"
 
     # Mock the ChatOpenAI class
-    with patch('app.core.llm.openai.ChatOpenAI') as mock_chat_openai:
+    with patch("app.core.llm.openai.ChatOpenAI") as mock_chat_openai:
         # Create a mock for the response
         mock_response = "The meaning of life is 42."
 
@@ -75,7 +73,7 @@ async def test_ask_with_default_parameters(openai_llm):
             api_key=settings.openai_api_key,
             temperature=settings.default_model_temperature,
             model_name=settings.openai_default_model,
-            max_tokens=settings.default_max_tokens
+            max_tokens=settings.default_max_tokens,
         )
 
         # Check if invoke was called with the right parameters
@@ -98,7 +96,7 @@ async def test_ask_with_custom_parameters(openai_llm):
     custom_max_tokens = 500
 
     # Mock the ChatOpenAI class
-    with patch('app.core.llm.openai.ChatOpenAI') as mock_chat_openai:
+    with patch("app.core.llm.openai.ChatOpenAI") as mock_chat_openai:
         # Create a mock for the response
         mock_response = "The meaning of life is 42."
 
@@ -108,10 +106,7 @@ async def test_ask_with_custom_parameters(openai_llm):
 
         # Call the ask method with custom parameters
         result = await openai_llm.ask(
-            query,
-            model=custom_model,
-            temperature=custom_temp,
-            max_tokens=custom_max_tokens
+            query, model=custom_model, temperature=custom_temp, max_tokens=custom_max_tokens
         )
 
         # Check if ChatOpenAI was initialized correctly with custom parameters
@@ -119,7 +114,7 @@ async def test_ask_with_custom_parameters(openai_llm):
             api_key=settings.openai_api_key,
             temperature=custom_temp,
             model_name=custom_model,
-            max_tokens=custom_max_tokens
+            max_tokens=custom_max_tokens,
         )
 
         # Check the returned response
@@ -134,7 +129,7 @@ async def test_ask_exception_handling(openai_llm):
     query = "What is the meaning of life?"
 
     # Mock the ChatOpenAI class to raise an exception
-    with patch('app.core.llm.openai.ChatOpenAI') as mock_chat_openai:
+    with patch("app.core.llm.openai.ChatOpenAI") as mock_chat_openai:
         chat_instance = mock_chat_openai.return_value
         chat_instance.invoke.side_effect = ValueError("API key not valid")
 

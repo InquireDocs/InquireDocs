@@ -37,8 +37,7 @@ class OllamaLLM(BaseLLM):
     def get_embeddings_provider(self, model_name: Optional[str] = None) -> OllamaEmbeddings:
         """Return the embeddings model"""
         return OllamaEmbeddings(
-            base_url=self.server_url,
-            model=model_name or settings.ollama_default_embeddings_model
+            base_url=self.server_url, model=model_name or settings.ollama_default_embeddings_model
         )
 
     async def ask(
@@ -46,7 +45,7 @@ class OllamaLLM(BaseLLM):
         query: str,
         model: Optional[str] = None,
         temperature: Optional[float] = None,
-        max_tokens: Optional[int] = None
+        max_tokens: Optional[int] = None,
     ) -> Dict[str, Any]:
         """Ask a question to OpenAI"""
 
@@ -60,7 +59,7 @@ class OllamaLLM(BaseLLM):
                 base_url=self.server_url,
                 model=model_name,
                 temperature=model_temperature,
-                num_predict=response_max_tokens
+                num_predict=response_max_tokens,
             )
 
             answer = llm.invoke([("human", query)])
@@ -71,7 +70,7 @@ class OllamaLLM(BaseLLM):
                 "model": answer.response_metadata["model"],
                 "provider": self.provider_name,
                 "temperature": model_temperature,
-                "response_max_tokens": response_max_tokens
+                "response_max_tokens": response_max_tokens,
             }
         except (ValueError, Exception) as e:
             msg = "Error generating answer"

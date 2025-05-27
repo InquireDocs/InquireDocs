@@ -52,12 +52,24 @@ def test_defaults():
         ({"DEFAULT_MODEL_TEMPERATURE": "0.5"}, "default_model_temperature", 0.5),
         ({"DEFAULT_MAX_TOKENS": "200"}, "default_max_tokens", 200),
         ({"OPENAI_API_KEY": "test-api-key"}, "openai_api_key", "test-api-key"),
-        ({"OPENAI_DEFAULT_EMBEDDINGS_MODEL": "test-embeddings"}, "openai_default_embeddings_model", "test-embeddings"),
+        (
+            {"OPENAI_DEFAULT_EMBEDDINGS_MODEL": "test-embeddings"},
+            "openai_default_embeddings_model",
+            "test-embeddings",
+        ),
         ({"OPENAI_DEFAULT_MODEL": "test-model"}, "openai_default_model", "test-model"),
         ({"OLLAMA_BASE_URL": "http://test-url:11434"}, "ollama_base_url", "http://test-url:11434"),
-        ({"OLLAMA_DEFAULT_EMBEDDINGS_MODEL": "test-ollama-embeddings"}, "ollama_default_embeddings_model", "test-ollama-embeddings"),
-        ({"OLLAMA_DEFAULT_MODEL": "test-ollama-model"}, "ollama_default_model", "test-ollama-model"),
-    ]
+        (
+            {"OLLAMA_DEFAULT_EMBEDDINGS_MODEL": "test-ollama-embeddings"},
+            "ollama_default_embeddings_model",
+            "test-ollama-embeddings",
+        ),
+        (
+            {"OLLAMA_DEFAULT_MODEL": "test-ollama-model"},
+            "ollama_default_model",
+            "test-ollama-model",
+        ),
+    ],
 )
 def test_env_overrides(monkeypatch, env_vars, field, expected):
     """

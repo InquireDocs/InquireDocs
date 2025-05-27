@@ -34,7 +34,7 @@ class LLMRequest(BaseModel):
                 "query": "What is the capital of France?",
                 "model": "gpt-4",
                 "temperature": 0.7,
-                "max_tokens": 100
+                "max_tokens": 100,
             }
         }
 

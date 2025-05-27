@@ -45,7 +45,7 @@ class BaseSummarizer(ABC):
         summary_type: Optional[str] = settings.default_summary_type,
         model: Optional[str] = None,
         temperature: Optional[float] = settings.default_model_temperature,
-        max_length: int = settings.default_max_tokens
+        max_length: int = settings.default_max_tokens,
     ) -> Dict[str, Any]:
         """
         Summarize a text
@@ -70,7 +70,7 @@ class BaseSummarizer(ABC):
         summary_type: Optional[str] = settings.default_summary_type,
         model: Optional[str] = None,
         temperature: Optional[float] = settings.default_model_temperature,
-        max_length: int = settings.default_max_tokens
+        max_length: int = settings.default_max_tokens,
     ) -> Dict[str, Any]:
         """
         Summarize a PDF document
@@ -107,10 +107,7 @@ class BaseSummarizer(ABC):
             raise ValueError(msg) from e
 
     async def generate_pdf_summary(
-            self,
-            summary_type: str,
-            llm: BaseChatModel,
-            file_content: bytes
+        self, summary_type: str, llm: BaseChatModel, file_content: bytes
     ) -> str:
         # Create temporary file to process the PDF
         with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as temp_file:
