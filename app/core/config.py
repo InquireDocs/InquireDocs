@@ -13,6 +13,7 @@
 #  limitations under the License.
 from typing import Optional
 
+from chromadb.config import DEFAULT_DATABASE, DEFAULT_TENANT
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -38,12 +39,29 @@ class Settings(BaseSettings):
     ollama_default_embeddings_model: Optional[str] = Field(default="all-minilm")
     ollama_default_model: Optional[str] = Field(default="llama3:8b")
 
+    # ChromaDB
+    chroma_server_host: Optional[str] = Field(default=None)
+    chroma_server_port: Optional[str] = Field(default=None)
+    chroma_server_ssl: Optional[bool] = Field(default=False)
+    chroma_server_token: Optional[str] = Field(default=None)
+    chroma_server_tenant: Optional[str] = Field(default=DEFAULT_TENANT)
+    chroma_server_database: Optional[str] = Field(default=DEFAULT_DATABASE)
+    chroma_server_collection_name: Optional[str] = Field(default="default")
+    chroma_server_embeddings_provider: Optional[str] = Field(default="ollama")
+
     # Available AI providers based on provided credentials
     @property
     def available_ai_providers(self):
         providers = ["ollama"]  # Ollama is always available as it can run locally
         if self.openai_api_key:
             providers.append("openai")
+        return providers
+
+    @property
+    def available_vector_store_providers(self):
+        providers = []
+        if self.chroma_server_host and self.chroma_server_port and self.chroma_server_token:
+            providers.append("chroma")
         return providers
 
     model_config = SettingsConfigDict(env_file=".env", case_sensitive=False)
