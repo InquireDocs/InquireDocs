@@ -13,12 +13,11 @@ langchain-community==0.3.24
 langchain-core==0.3.64
 langchain-openai==0.3.21
 langchain-ollama==0.3.3
-# langchain-postgres==0.0.14
 
 # Sources
 pypdf==5.6.0
 
 # Database
 chromadb==1.0.12
-# pgvector==0.4.0
-# psycopg-binary==3.2.6
+pgvector==0.4.1
+psycopg[binary,pool]==3.2.9

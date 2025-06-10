@@ -12,6 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 from collections.abc import Iterable
+import logging
 from typing import Callable, Literal, Union
 
 from langchain.indexes import SQLRecordManager, index
@@ -20,20 +21,38 @@ from langchain_core.documents import Document
 from langchain_core.indexing.base import DocumentIndex
 from langchain_core.vectorstores import VectorStore
 
+from app.core.config import settings
 
-class SQLiteRecordManager():
-    """Record Manager"""
 
-    def __init__(self, record_manager_namespace: str,
+logger = logging.getLogger(__name__)
+
+
+class PostgresRecordManager():
+    """Postgres Record Manager"""
+
+    def __init__(self,
+                 record_manager_namespace: str,
                  cleanup: Literal["incremental", "full", "scoped_full", None] = "scoped_full",
                  source_id_key: Union[str, Callable[[Document], str], None] = None) -> None:
-        self.instance = SQLRecordManager(
-            record_manager_namespace,
-            db_url="sqlite:///record_manager_cache.sql"
-        )
-        self.instance.create_schema()
-        self.cleanup = cleanup
-        self.source_id_key = source_id_key
+
+        try:
+            connection_string = (
+                f"postgresql+psycopg://{settings.postgres_record_manager_user}:"
+                f"{settings.postgres_record_manager_password}@"
+                f"{settings.postgres_record_manager_host}:"
+                f"{settings.postgres_record_manager_port}/"
+                f"{settings.postgres_record_manager_database}"
+            )
+            self.instance = SQLRecordManager(
+                record_manager_namespace,
+                db_url=connection_string
+            )
+            self.instance.create_schema()
+            self.cleanup = cleanup
+            self.source_id_key = source_id_key
+        except (ValueError, Exception) as e:
+            logger.error("Error connecting to the Postgres Record Manager database. %s", e)
+            raise
 
     def index(self,
               documents_list: Union[BaseLoader, Iterable[Document]],

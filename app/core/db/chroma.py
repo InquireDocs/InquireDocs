@@ -18,7 +18,7 @@ from langchain_chroma import Chroma
 
 from app.core.config import settings
 from app.core.db.base import BaseDatabase
-from app.core.db.record_manager import SQLiteRecordManager
+from app.core.db.postgres_record_manager import PostgresRecordManager
 from app.core.llm import get_llm_provider
 
 
@@ -32,22 +32,22 @@ class ChromaDb(BaseDatabase):
         """Initialize ChromaDb"""
         if "chroma" in settings.available_vector_store_providers:
             self.client = chromadb.HttpClient(
-                host=settings.chroma_server_host,
-                port=settings.chroma_server_port,
-                ssl=settings.chroma_server_ssl,
-                headers={"X-CHROMA-TOKEN": settings.chroma_server_token},
-                tenant=settings.chroma_server_tenant,
-                database=settings.chroma_server_database)
+                host=settings.chroma_host,
+                port=settings.chroma_port,
+                ssl=settings.chroma_ssl,
+                headers={"X-CHROMA-TOKEN": settings.chroma_token},
+                tenant=settings.chroma_tenant,
+                database=settings.chroma_database)
 
-            self.collection_name = settings.chroma_server_collection_name
+            self.collection_name = settings.chroma_collection_name
 
-            embeddings_provider = get_llm_provider(settings.chroma_server_embeddings_provider)
+            embeddings_provider = get_llm_provider(settings.chroma_embeddings_provider)
             self.embedding_function = embeddings_provider.get_embeddings_provider()
 
             self.rm_namespace = f"{self.provider_name}/{self.collection_name}"
-            self.record_manager = SQLiteRecordManager(self.rm_namespace,
-                                                      index_cleanup,
-                                                      index_source_id_key).instance
+            self.record_manager = PostgresRecordManager(self.rm_namespace,
+                                                        index_cleanup,
+                                                        index_source_id_key).instance
 
             self.vector_store = Chroma(
                 client=self.client,
