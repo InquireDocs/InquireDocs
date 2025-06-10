@@ -13,11 +13,13 @@
 #  limitations under the License.
 from typing import Optional
 
+from chromadb.config import DEFAULT_DATABASE, DEFAULT_TENANT
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
+    """Settings manager"""
     debug: bool = Field(default=False)
 
     # Project settings
@@ -38,12 +40,38 @@ class Settings(BaseSettings):
     ollama_default_embeddings_model: Optional[str] = Field(default="all-minilm")
     ollama_default_model: Optional[str] = Field(default="llama3:8b")
 
+    # Postgres Record Manager
+    postgres_record_manager_host: str = Field(default=None)
+    postgres_record_manager_port: Optional[int] = Field(default=5432)
+    postgres_record_manager_user: str = Field(default=None)
+    postgres_record_manager_password: str = Field(default=None)
+    postgres_record_manager_database: str = Field(default=None)
+
+    # ChromaDB
+    chroma_host: Optional[str] = Field(default=None)
+    chroma_port: Optional[str] = Field(default=None)
+    chroma_ssl: Optional[bool] = Field(default=False)
+    chroma_token: Optional[str] = Field(default=None)
+    chroma_tenant: Optional[str] = Field(default=DEFAULT_TENANT)
+    chroma_database: Optional[str] = Field(default=DEFAULT_DATABASE)
+    chroma_collection_name: Optional[str] = Field(default="inquiredocs_knowledge_base")
+    chroma_embeddings_provider: Optional[str] = Field(default="ollama")
+
     # Available AI providers based on provided credentials
     @property
     def available_ai_providers(self):
+        """Returns the list of available AI LLM providers"""
         providers = ["ollama"]  # Ollama is always available as it can run locally
         if self.openai_api_key:
             providers.append("openai")
+        return providers
+
+    @property
+    def available_vector_store_providers(self):
+        """Returns the list of available vector store providers"""
+        providers = []
+        if self.chroma_host and self.chroma_port and self.chroma_token:
+            providers.append("chroma")
         return providers
 
     model_config = SettingsConfigDict(env_file=".env", case_sensitive=False)

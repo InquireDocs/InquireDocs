@@ -1,5 +1,5 @@
 # General
-fastapi==0.115.12
+fastapi==0.115.9
 pydantic==2.11.5
 pydantic-settings==2.9.1
 python-multipart==0.0.20
@@ -8,15 +8,16 @@ uvicorn[standard]==0.34.3
 # Langchain
 langchain==0.3.25
 langchain-aws==0.2.24
+langchain-chroma==0.2.4
 langchain-community==0.3.24
 langchain-core==0.3.64
 langchain-openai==0.3.21
 langchain-ollama==0.3.3
-# langchain-postgres==0.0.14
 
 # Sources
 pypdf==5.6.0
 
 # Database
-# pgvector==0.4.0
-# psycopg-binary==3.2.6
+chromadb==1.0.12
+pgvector==0.4.1
+psycopg[binary,pool]==3.2.9
