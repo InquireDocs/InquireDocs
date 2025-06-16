@@ -1,0 +1,40 @@
+version: "3.9"
+
+services:
+  record_manager:
+    image: postgres:17
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER="${postgres_record_manager_user}"
+      - POSTGRES_PASSWORD="${postgres_record_manager_password}
+      - POSTGRES_DB="${postgres_record_manager_database}"
+    ports:
+      - "${postgres_record_manager_port}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # vector_store:
+  #   image: chromadb/chroma:1.0.12
+  #   env_file:
+  #     - .env
+  #   environment:
+  #     - IS_PERSISTENT=TRUE
+  #     - ANONYMIZED_TELEMETRY=FALSE
+  #   ports:
+  #     - "${CHROMA_PORT}:8000"
+
+  # backend:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   env_file:
+  #     - .env
+  #   ports:
+  #     - "8000:5000"
+  #   depends_on:
+  #     - record_manager
+  #     - vector_store
+
+volumes:
+  postgres_data:

@@ -21,12 +21,16 @@ from app.core.logging_config import root_logger  # noqa: F401
 from app.api.v1.routes import router as v1_router
 from app.core.config import settings
 
+from app.core.db.postgres_record_manager import PostgresRecordManager
+
 
 logger = logging.getLogger(__name__)
 
 app = FastAPI(title=settings.project_name)
 
 logger.info("Starting")
+
+record_manager = PostgresRecordManager(record_manager_namespace="test", source_id_key="test_source")
 
 
 @app.get("/", status_code=status.HTTP_200_OK, tags=["root"])
