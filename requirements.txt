@@ -15,7 +15,7 @@ langchain-ollama==0.3.3
 # langchain-postgres==0.0.14
 
 # Sources
-pypdf==5.6.0
+pypdf==5.6.1
 
 # Database
 # pgvector==0.4.0
